@@ -1,13 +1,13 @@
 import asyncio
-from typing import Any
 import aiohttp
 import requests
 from lxml import html
+from Model.ManageProduto import Tipo_Produto
 
 
 class ScraperKabum:
-    def __init__(self, produto: str) -> None:
-        self.__produto: str = produto
+    def __init__(self, produto: Tipo_Produto) -> None:
+        self.__produto: Tipo_Produto = produto
         self.__links: list[str] = []
         self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": []}
         self.__semaphore = asyncio.Semaphore(80)
@@ -18,13 +18,15 @@ class ScraperKabum:
         Returns:
             dict[str, list[str]]: dados dos produtos
         """
-        loop = asyncio.get_event_loop() #Checar a utilização do loop do asyncio para ter certeza que não vai dar problema no acesso de memória.
+        loop = (
+            asyncio.get_event_loop()
+        )  # Checar a utilização do loop do asyncio para ter certeza que não vai dar problema no acesso de memória.
         if loop.is_running():
             return loop.run_until_complete(self.__main())
         else:
             return asyncio.run(self.__main())
 
-    def set_produto(self, produto: str) -> None:
+    def set_produto(self, produto: Tipo_Produto) -> None:
         self.__produto = produto
 
     async def __main(self) -> dict[str, list[str]]:
@@ -33,8 +35,8 @@ class ScraperKabum:
         Returns:
             dict[str, list[str]]: dados dos produtos
         """
-        await self.__get_all_pages() #Prefiro deixar os dois métodos dentro dessa mesma função a fim de deixar o código mais plausível.
-        await self.__get_pages_contents()
+        await self.__fetch_product_links()  # Prefiro deixar os dois métodos dentro dessa mesma função a fim de deixar o código mais plausível.
+        await self.__get_content_from_links()
         return {
             "Nome": self.__data["Nome"].copy(),
             "Valor": self.__data["Valor"].copy(),
@@ -55,18 +57,28 @@ class ScraperKabum:
             async with session.get(url, ssl=False) as response:
                 return await response.text()
 
-    async def __get_all_pages(self) -> None:
-        """Salva no self.__links todos os links que existem nas páginas de pesquisas, ou seja, salva todos os links dos produtos
-        """
+    async def __fetch_product_links(self) -> None:
+        """Salva no self.__links todos os links que existem nas páginas de pesquisas, ou seja, salva todos os links dos produtos"""
         tasks = []
         pages = []
+        produto = ""
+        if self.__produto == Tipo_Produto.CPU:
+            produto = "processador"
+        if self.__produto == Tipo_Produto.GPU:
+            produto = "placa de video"
+        if self.__produto == Tipo_Produto.HDD:
+            produto = "hd"
+        if self.__produto == Tipo_Produto.RAM:
+            produto = "ram"
+        if self.__produto == Tipo_Produto.SSD:
+            produto = "ssd"
         page = requests.get(
-            f'https://www.kabum.com.br/busca/{self.__produto.replace(" ", "-")}'
-        ) #Precisa fazer essa requisição de forma síncrona para retirar a quantidade de páginas
+            f"https://www.kabum.com.br/busca/{produto}"
+        )  # Precisa fazer essa requisição de forma síncrona para retirar a quantidade de páginas
         qtd_pages = html.fromstring(page.content).xpath(
             "/html/body/div[1]/div/div/div[1]/div[3]/div/div/div[2]/div[1]/div[3]/ul/li[12]/a/text()"
-        ) #Acha aquele número do final da página pra achar a qtd total de páginas que tem que iterar
-        qtd_pages = int(qtd_pages[0]) if qtd_pages else 1  # Handle cases with no pages
+        )  # Acha aquele número do final da página pra achar a qtd total de páginas que tem que iterar
+        qtd_pages = int(qtd_pages[0]) if qtd_pages else 1
 
         async with aiohttp.ClientSession() as session:
             for i in range(1, qtd_pages + 1):
@@ -76,7 +88,6 @@ class ScraperKabum:
             for response in responses:
                 pages.append(response)
 
-
         for page in pages:
             tree = html.fromstring(page)
             for i in range(1, 21):
@@ -84,13 +95,14 @@ class ScraperKabum:
                     f"/html/body/div[1]/div/div/div[1]/div[3]/div/div/div[2]/div[1]/main/article[{i}]/a/@href"
                 )
                 if link:
-                    self.__links.append(f"https://www.kabum.com.br{link[0]}") #precisa colocar esse www.kabum antes pq na página principal os links vem sem.
+                    self.__links.append(
+                        f"https://www.kabum.com.br{link[0]}"
+                    )  # precisa colocar esse www.kabum antes pq na página principal os links vem sem.
                 else:
                     break
 
-    async def __get_pages_contents(self) -> None:
-        """Acessa os links em self.__links e pega os dados de cada produto: nome e valor em reais.
-        """
+    async def __get_content_from_links(self) -> None:
+        """Acessa os links em self.__links e pega os dados de cada produto: nome e valor em reais."""
         tasks = []
         responses = []
         pages = []
@@ -105,19 +117,19 @@ class ScraperKabum:
             tree = html.fromstring(page)
             nome: list = tree.xpath(
                 "/html/body/div[1]/div/div/main/article/section/div[3]/div[1]/div/h1/text()"
-            ) #Localização do nome se tiver um aviso que tem desconto
+            )  # Localização do nome se tiver um aviso que tem desconto
             if not nome:
                 nome = tree.xpath(
                     "/html/body/div[1]/div/div/main/article/section/div[2]/div[1]/div/h1/text()"
-                ) #Localização do nome se não tiver um aviso que tem desconto
+                )  # Localização do nome se não tiver um aviso que tem desconto
             if nome:
                 valor: list = tree.xpath(
                     "/html/body/div[1]/div/div/main/article/section/div[3]/div[1]/div/div[1]/div[2]/div[1]/div[3]/div[1]/div/h4/text()"
-                ) #Localização do valor se tiver um aviso que tem desconto
+                )  # Localização do valor se tiver um aviso que tem desconto
                 if not valor:
                     valor = tree.xpath(
                         "/html/body/div[1]/div/div/main/article/section/div[2]/div[1]/div/div[1]/div[2]/div[1]/div[2]/div[1]/div/h4/text()"
-                    ) #Localização do valor se não tiver um aviso que tem desconto
+                    )  # Localização do valor se não tiver um aviso que tem desconto
                 if valor:
                     self.__data["Nome"].append(nome[0])
                     self.__data["Valor"].append(valor[0])
