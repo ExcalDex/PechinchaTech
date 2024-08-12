@@ -1,0 +1,4 @@
+aiohttp == 3.9.5
+asyncio == 3.4.3
+lxml == 4.9.4
+selenium == 4.16.0

@@ -6,7 +6,6 @@ import numpy
 class Lojas(Enum):
     AMAZON = (1,)
     KABUM = (2,)
-    PICHAU = (3,)
     MERCADO_LIVRE = (4,)
     TERABYTE = 5
 
@@ -22,11 +21,21 @@ class Tipo_Produto(Enum):
 class Produto:
 
     __benchmark_dir: str = f"{os.getcwd()}\\benchmark"
-    __tabela_cpu: pd.DataFrame = pd.read_csv(f"{__benchmark_dir}\\CPU_UserBenchmarks.csv")
-    __tabela_gpu: pd.DataFrame = pd.read_csv(f"{__benchmark_dir}\\GPU_UserBenchmarks.csv")
-    __tabela_hdd: pd.DataFrame = pd.read_csv(f"{__benchmark_dir}\\HDD_UserBenchmarks.csv")
-    __tabela_ram: pd.DataFrame = pd.read_csv(f"{__benchmark_dir}\\RAM_UserBenchmarks.csv")
-    __tabela_ssd: pd.DataFrame = pd.read_csv(f"{__benchmark_dir}\\SSD_UserBenchmarks.csv")
+    __tabela_cpu: pd.DataFrame = pd.read_csv(
+        f"{__benchmark_dir}\\CPU_UserBenchmarks.csv"
+    )
+    __tabela_gpu: pd.DataFrame = pd.read_csv(
+        f"{__benchmark_dir}\\GPU_UserBenchmarks.csv"
+    )
+    __tabela_hdd: pd.DataFrame = pd.read_csv(
+        f"{__benchmark_dir}\\HDD_UserBenchmarks.csv"
+    )
+    __tabela_ram: pd.DataFrame = pd.read_csv(
+        f"{__benchmark_dir}\\RAM_UserBenchmarks.csv"
+    )
+    __tabela_ssd: pd.DataFrame = pd.read_csv(
+        f"{__benchmark_dir}\\SSD_UserBenchmarks.csv"
+    )
     __tabela_geral: numpy.ndarray
 
     def __init__(
