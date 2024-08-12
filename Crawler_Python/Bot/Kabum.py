@@ -5,7 +5,7 @@ import requests
 from lxml import html
 
 
-class ScraperKabum:
+class Scraper:
     def __init__(self, produto: str) -> None:
         self.__produto: str = produto
         self.__links: list[str] = []

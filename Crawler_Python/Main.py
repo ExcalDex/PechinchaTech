@@ -21,4 +21,3 @@ if __name__ == "__main__":
     for i in range(len(p_list)):
         if p_list[i].get_nome().isspace():
             p_list.pop(i)
-    
