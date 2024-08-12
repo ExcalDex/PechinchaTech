@@ -1,5 +1,3 @@
-import Bot.Kabum_Galery
-import Bot.Kabum_PBP
 import Bot.Mercado_Livre
 import json
 
