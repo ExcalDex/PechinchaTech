@@ -5,7 +5,7 @@ from lxml import html
 from Model.ManageProduto import Tipo_Produto
 
 
-class ScraperKabum:
+class Scraper:
     def __init__(self, produto: Tipo_Produto) -> None:
         self.__produto: Tipo_Produto = produto
         self.__links: list[str] = []
