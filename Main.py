@@ -6,7 +6,8 @@ import time
 if __name__ == "__main__":
     start = time.time()
     data = Bot.run() # Dados puros dos produto
-    print(time.time() - start)
+    print("Tempo de execução: " + str(time.time() - start) + " segundos")
+    print("Em uma busca por " + str(len(data["Nome"])) + " produtos!")
     p_list: list[Produto] = [] # Lista de produtos (classe)
     for i in range(len(data["Nome"])):
         p_list.append(

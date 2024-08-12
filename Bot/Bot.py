@@ -4,6 +4,6 @@ import json
 
 
 def run() -> dict:
-    bot = Bot.Kabum.ScraperKabum("placa de video")
+    bot = Bot.Kabum.Scraper("placa de video")
     data = bot.get_produtos()
     return data
