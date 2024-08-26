@@ -3,10 +3,11 @@ from typing import Any
 import requests
 from lxml import html
 import re
+from Model.ManageProduto import Tipo_Produto
 
 class Scraper:
-    def __init__(self, produto: str) -> None:
-        self.__produto: str = produto
+    def __init__(self, produto: Tipo_Produto) -> None:
+        self.__produto: Tipo_Produto = produto
         self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": []}
     
     def get_produtos(self) -> dict[str, list[str]]:
@@ -28,7 +29,19 @@ class Scraper:
         }
     
     async def __get_all_products(self) -> None:
-        page = requests.get(f"https://lista.mercadolivre.com.br/{self.__produto.replace(" ", "-")}_Desde_48_NoIndex_True")
+        produto = ""
+        if self.__produto == Tipo_Produto.CPU:
+            produto = "processadores/processador"
+        if self.__produto == Tipo_Produto.GPU:
+            produto = "placas/placa-video/placa-de-video"
+        if self.__produto == Tipo_Produto.HDD:
+            produto = "discos-acessorios/hds-ssds/hd"
+        if self.__produto == Tipo_Produto.RAM:
+            produto = "memorias-ram/ram"
+        if self.__produto == Tipo_Produto.SSD:
+            produto = "discos-acessorios/hds-ssds/ssd"
+
+        page = requests.get(f"https://lista.mercadolivre.com.br/informatica/componentes-pc/{produto}_Desde_48_NoIndex_True")
         tree =  html.fromstring(page.content)
         qtd_pages = 1
 
