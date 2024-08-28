@@ -92,8 +92,6 @@ class Produto:
             )
             splitted_text.extend(str(Produto.__tabela_geral[j][3]).split())
 
-            if "3060" in str(Produto.__tabela_geral[j][3]):
-                ...
 
             for s in splitted_text:
                 if s in nome_prov and len(s) > 1:

@@ -1,13 +1,12 @@
 from Model.ManageProduto import *
 from Bot import Bot
-import time
+import json
 
 
 if __name__ == "__main__":
-    start = time.time()
     data = Bot.run()  # Dados puros dos produto
-    print(data["Nome"][0])
-    print(time.time() - start)
+    with open("teste.json", 'w', encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
     # p_list: list[Produto] = []  # Lista de produtos (classe)
     # for i in range(len(data["Nome"])):
     #     p_list.append(
