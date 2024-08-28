@@ -4,10 +4,8 @@ import numpy
 
 
 class Lojas(Enum):
-    AMAZON = (1,)
-    KABUM = (2,)
-    MERCADO_LIVRE = (4,)
-    TERABYTE = 5
+    KABUM = (1,)
+    MERCADO_LIVRE = 2
 
 
 class Tipo_Produto(Enum):
