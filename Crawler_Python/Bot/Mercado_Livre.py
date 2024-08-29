@@ -12,7 +12,7 @@ class Scraper:
         self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": []}
 
     def get_produtos(self) -> dict[str, list[str]]:
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         if loop.is_running():
             loop.run_until_complete(self.__get_all_products())
         else:
@@ -82,7 +82,7 @@ class Scraper:
                 else:
                     reais = int(numeros[0])
                     centavos = int(numeros[1])
-                valores[j] = "R$" + str(reais + (centavos / 100))
+                valores[j] = reais + (centavos / 100)
 
             links: list = tree.xpath(
                 f"//*[@class='ui-search-item__group__element ui-search-link__title-card ui-search-link']/@href"
