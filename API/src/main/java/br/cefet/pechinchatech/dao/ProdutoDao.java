@@ -17,8 +17,8 @@ import br.cefet.pechinchatech.model.Produto;
 public interface ProdutoDao {
 
     @GetGeneratedKeys
-    @SqlUpdate(" insert into produto (nome, preco, link, loja, tipo, id_produto_base) "
-            + " values (:nome, :preco, :link, :loja, :tipoProduto, :idProdutoBase);")
+    @SqlUpdate(" insert into produto (nome, preco, link, loja, tipo, id_produto_base, link_imagem) "
+            + " values (:nome, :preco, :link, :loja, :tipoProduto, :idProdutoBase, :imageLink);")
     public Long inserir(@BindBean Produto p);
 
     @SqlQuery("SELECT * FROM produto;")
