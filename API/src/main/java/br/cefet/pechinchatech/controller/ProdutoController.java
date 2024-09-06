@@ -39,6 +39,13 @@ public class ProdutoController {
 	@PostMapping({"/", ""})
 	public ResponseEntity<Produto> inserir(@Valid @RequestBody Produto p) {
 		return ResponseEntity.ok(pService.inserir(p));
+		
+	}
+
+	@PostMapping({"/", ""})
+	public ResponseEntity<List<Produto>> inserir(@Valid @RequestBody List<Produto> p) {
+		return ResponseEntity.ok(pService.inserir(p));
+		
 	}
 
 	@PutMapping({"/", ""})
