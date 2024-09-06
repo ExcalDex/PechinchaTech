@@ -27,7 +27,7 @@ public class ProdutoBaseController {
     }
 
     @GetMapping({"/", ""})
-    public ResponseEntity<List<ProdutoBase>> consultar(@RequestParam String param) {
+    public ResponseEntity<List<ProdutoBase>> consultar() {
         return ResponseEntity.ok(pbService.consultar());
     }
 
@@ -37,8 +37,14 @@ public class ProdutoBaseController {
 	}
 
     @GetMapping("/{nome}")
-    public ResponseEntity<Long> getMethodName(@PathVariable String nome) {
+    public ResponseEntity<Long> matchNomeId(@PathVariable String nome) {
         return ResponseEntity.ok(pbService.match_id(nome));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoBase> consultar(@PathVariable Long id) {
+        return ResponseEntity.ok(pbService.consultar(id));
+    }
+    
     
 }

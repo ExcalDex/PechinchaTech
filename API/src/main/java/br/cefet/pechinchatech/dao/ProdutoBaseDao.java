@@ -24,6 +24,9 @@ public interface ProdutoBaseDao {
     @SqlQuery("SELECT * FROM produto_base;")
     public List<ProdutoBase> consultar();
 
+    @SqlQuery("SELECT * FROM produto_base WHERE :id = produto_base.id;")
+    public ProdutoBase consultar(@Bind("id") Long id);
+
     @SqlQuery("SELECT id FROM produto_base WHERE :nome = produto_base.nome")
     public Long encontrar_id(@Bind("nome") String nome);
 

@@ -36,6 +36,10 @@ public class ProdutoBaseService {
         return produtoBaseDao.consultar();
     }
 
+    public ProdutoBase consultar(Long id){
+        return produtoBaseDao.consultar(id);
+    }
+
     public Long match_id(String p_nome){
         if (p_nome == null || p_nome.isBlank()) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Insira um nome!");
