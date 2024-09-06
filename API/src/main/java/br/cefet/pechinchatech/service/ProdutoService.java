@@ -42,7 +42,7 @@ public class ProdutoService {
             Long id = produtoDao.inserir(p);
             p.setId(id);
         }
-        this.sService.notificarClientes(pl);;
+        this.sService.notificarClientes(pl);
         return pl;
     }
 

@@ -42,7 +42,7 @@ public class ProdutoController {
 		
 	}
 
-	@PostMapping({"/", ""})
+	@PostMapping({"/batch", ""})
 	public ResponseEntity<List<Produto>> inserir(@Valid @RequestBody List<Produto> p) {
 		return ResponseEntity.ok(pService.inserir(p));
 		
