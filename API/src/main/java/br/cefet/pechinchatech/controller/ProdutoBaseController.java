@@ -14,8 +14,6 @@ import br.cefet.pechinchatech.model.ProdutoBase;
 import br.cefet.pechinchatech.service.ProdutoBaseService;
 import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/api/produtobase")
