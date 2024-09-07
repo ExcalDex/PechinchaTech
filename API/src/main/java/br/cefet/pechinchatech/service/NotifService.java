@@ -31,6 +31,10 @@ public class NotifService {
     public Notif consultar(Long idpb, Long idu) {
         return NotifDao.consultar(idpb, idu);
     }
+
+    public List<Notif> consultar(Long idu){
+        return NotifDao.consultar(idu);
+    }
     
 
     public Notif excluir(Long idpb, Long idu) {

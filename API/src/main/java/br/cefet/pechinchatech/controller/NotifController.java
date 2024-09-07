@@ -29,9 +29,14 @@ public class NotifController {
 		return ResponseEntity.ok(nService.consultar());
 	}
 
-    @GetMapping({"/produtobase/{idpb}/usuario/{idu}"})
+    @GetMapping("/produtobase/{idpb}/usuario/{idu}")
 	public ResponseEntity<Notif> consultaNotif(@PathVariable Long idpb, @PathVariable Long idu) {
 		return ResponseEntity.ok(nService.consultar(idpb, idu));
+	}
+
+	@GetMapping("/usuario/{idu}")
+	public ResponseEntity<List<Notif>> consultaNotifUsuario(@PathVariable long idu) {
+		return ResponseEntity.ok(nService.consultar(idu));
 	}
 
 	@PostMapping({"/", ""})

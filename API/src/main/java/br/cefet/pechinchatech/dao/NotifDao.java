@@ -28,4 +28,7 @@ public interface NotifDao {
     @SqlQuery("DELETE FROM notif WHERE :idpb = notif.id_produto_base AND :idu = notif.id_usuario;")
     public int excluir(@Bind("idpb") Long idpb, @Bind("idu") Long idu);
 
+    @SqlQuery("SELECT * FROM notif WHERE :idu = notif.id_usuario")
+    public List<Notif> consultar(@Bind("idu") Long idu);
+
 }
