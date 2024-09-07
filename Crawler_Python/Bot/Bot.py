@@ -4,7 +4,7 @@ from Model.ManageProduto import Tipo_Produto, Lojas
 
 
 def run() -> dict:
-    data = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Loja": []}
+    data = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Loja": [], "Imagem": []}
     for tipo_produto in Tipo_Produto:
         data_k = Bot.Kabum.Scraper(tipo_produto).get_produtos()
         data_ml = Bot.Mercado_Livre.Scraper(tipo_produto).get_produtos()

@@ -1,15 +1,18 @@
 import asyncio
-from typing import Any
 import requests
+import aiohttp
 from lxml import html
 import re
 from Model.ManageProduto import Tipo_Produto
 
+NUMERO_DE_REQUESTS_AO_MESMO_TEMPO: int = 10000
 
+#Todo: Procurar por imagens nas páginas.
 class Scraper:
     def __init__(self, produto: Tipo_Produto) -> None:
         self.__produto: Tipo_Produto = produto
-        self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": []}
+        self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Imagem": []}
+        self.__semaphore = asyncio.Semaphore(NUMERO_DE_REQUESTS_AO_MESMO_TEMPO)
 
     def get_produtos(self) -> dict[str, list[str]]:
         loop = asyncio.new_event_loop()
@@ -21,11 +24,27 @@ class Scraper:
             "Nome": self.__data["Nome"].copy(),
             "Valor": self.__data["Valor"].copy(),
             "Link": self.__data["Link"].copy(),
-            "Tipo": self.__data["Tipo"].copy()
+            "Tipo": self.__data["Tipo"].copy(),
+            "Imagem": self.__data["Imagem"].copy()
         }
 
     def set_produto(self, produto: Tipo_Produto) -> None:
         self.__produto = produto
+
+
+    async def __fetch(self, session, url: str) -> str:
+        """Função para limitar o número de requisições web assíncronas ao mesmo tempo (alguns sites tem limite de acessos)
+
+        Args:
+            session (_type_): seção assíncrona
+            url (_type_): link
+
+        Returns:
+            str: código html da página
+        """
+        async with self.__semaphore:
+            async with session.get(url, ssl=False) as response:
+                return await response.text()
 
     async def __get_all_products(self) -> None:
         produto = ""
@@ -60,9 +79,15 @@ class Scraper:
                 )
                 qtd_pages = int(qtd_pages[0])
 
-        for i in range(1, qtd_pages + 1):
-            page = requests.get(f"{page.url}_Desde_{i * 48}_NoIndex_True")
-            tree = html.fromstring(page.content)
+        tasks = []
+        async with aiohttp.ClientSession() as session:
+            for i in range(1, qtd_pages + 1):
+                url: str = f"{page.url}_Desde_{i * 48}_NoIndex_True"
+                tasks.append(self.__fetch(session, url))
+            responses = await asyncio.gather(*tasks)
+
+        for page in responses:
+            tree = html.fromstring(page)
             nomes: list = tree.xpath(f"//*[@class='ui-search-item__title']/text()")
             valores: list = tree.xpath(
                 f"//*/div[(@class='ui-search-item__group__element ui-search-price__part-without-link') or (@class='ui-search-item__group ui-search-item__group--pds')]/div[(@class='ui-search-price ui-search-price--size-x-tiny ui-search-item__pds-best-price ui-search-item__group__element ui-search-color--black') or (@class='ui-search-price ui-search-price--size-medium')]/div[@class='ui-search-price__second-line']/span[@aria-roledescription='Preço']/@aria-label"

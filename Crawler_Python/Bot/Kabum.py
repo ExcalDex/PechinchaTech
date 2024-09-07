@@ -5,12 +5,13 @@ from Model.ManageProduto import Tipo_Produto
 from bs4 import BeautifulSoup
 import json
 
+NUMERO_DE_REQUESTS_AO_MESMO_TEMPO: int = 10000
 
 class Scraper:
     def __init__(self, produto: Tipo_Produto) -> None:
         self.__produto: Tipo_Produto = produto
-        self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": []}
-        self.__semaphore = asyncio.Semaphore(80)
+        self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Imagem": []}
+        self.__semaphore = asyncio.Semaphore(NUMERO_DE_REQUESTS_AO_MESMO_TEMPO)
 
     def get_produtos(self) -> dict[str, list[str]]:
         """Retorna um dict com os dados dos produtos, igual no self.__data
@@ -29,7 +30,8 @@ class Scraper:
             "Nome": self.__data["Nome"].copy(),
             "Valor": self.__data["Valor"].copy(),
             "Link": self.__data["Link"].copy(),
-            "Tipo": self.__data["Tipo"].copy()
+            "Tipo": self.__data["Tipo"].copy(),
+            "Imagem": self.__data["Imagem"].copy()
         }
 
     def set_produto(self, produto: Tipo_Produto) -> None:
@@ -52,20 +54,19 @@ class Scraper:
     async def __get_all_products(self) -> None:
         """Reúne os dados dos produtos desejados."""
         tasks = []
-        pages = []
         produto = ""
         if self.__produto == Tipo_Produto.CPU:
-            produto = "processador"
+            produto = "processadores"
         if self.__produto == Tipo_Produto.GPU:
-            produto = "placa de video"
+            produto = "placa-de-video-vga"
         if self.__produto == Tipo_Produto.HDD:
-            produto = "hd"
+            produto = "disco-rigido-hd"
         if self.__produto == Tipo_Produto.RAM:
-            produto = "ram"
+            produto = "memoria-ram"
         if self.__produto == Tipo_Produto.SSD:
-            produto = "ssd"
+            produto = "ssd-2-5"
         page = requests.get(
-            f"https://www.kabum.com.br/busca/{produto}"
+            f"https://www.kabum.com.br/hardware/{produto}"
         )  # Precisa fazer essa requisição de forma síncrona para retirar a quantidade de páginas
         primeira_pagina = BeautifulSoup(page.content, "html.parser")
         paginas = primeira_pagina.find_all("a", class_="page")
@@ -76,17 +77,15 @@ class Scraper:
                 url: str = f"{page.url}?&page_number={i}&facet_filters=&sort=-price"
                 tasks.append(self.__fetch(session, url))
             responses = await asyncio.gather(*tasks)
-            for response in responses:
-                pages.append(response)
 
-        for page in pages:
-
+        for page in responses:
             bs_page = BeautifulSoup(page, "html.parser")
             links = bs_page.find_all("script")[-1].string
             kabum_json = json.loads(links)
-            dados_gerais = json.loads(kabum_json["props"]["pageProps"]["data"])
-
-            produtos = dados_gerais["catalogServer"]["data"]
+            try:
+                produtos = kabum_json["props"]["pageProps"]["data"]["catalogServer"]["data"]
+            except:
+                produtos = json.loads(kabum_json["props"]["pageProps"]["data"])["catalogServer"]["data"]
 
             for produto in produtos:
                 self.__data["Nome"].append(produto["name"])
@@ -103,3 +102,5 @@ class Scraper:
                 )
 
                 self.__data["Tipo"].append(self.__produto.name)
+
+                self.__data["Imagem"].append(produto["image"])

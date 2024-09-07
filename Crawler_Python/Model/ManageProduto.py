@@ -1,6 +1,8 @@
 import pandas as pd, os
 from enum import Enum
 import numpy
+from typing import Any
+import requests
 
 
 class Lojas(Enum):
@@ -37,13 +39,14 @@ class Produto:
     __tabela_geral: numpy.ndarray
 
     def __init__(
-        self, nome_prov: str, tipo: Tipo_Produto, valor: float, link: str, loja: Lojas
+        self, nome_prov: str, tipo: Tipo_Produto, valor: float, link: str, loja: Lojas, link_img: str
     ) -> None:
         self.__tipo: Tipo_Produto = tipo
         self.__valor: float = valor
         self.__link: str = link
         self.__loja: Lojas = loja
         self.__nome: str = self.__identificar_produto(nome_prov)
+        self.__link_img: str = link_img
 
     def get_tipo(self) -> str:
         return self.__tipo.name
@@ -59,6 +62,9 @@ class Produto:
 
     def get_nome(self) -> str:
         return self.__nome
+    
+    def get_img(self) -> str:
+        return self.__link_img
 
     def __identificar_produto(self, nome_prov: str) -> str:
 
@@ -100,3 +106,19 @@ class Produto:
                 final_model = Produto.__tabela_geral[j][3]
 
         return final_model
+    
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            'nome' : self.get_nome(),
+            'preco' : self.get_valor(),
+            'link' : self.get_link(),
+            'loja' : self.get_loja(),
+            'tipoProduto' : self.get_tipo(),
+            'idProdutoBase' : self.get_idProdutoBase(),
+            'imageLink' : self.get_img()
+        }
+    
+    
+    def get_idProdutoBase(self) -> int:
+        r = requests.get(f'localhost:8087/api/produtobase/{self.__nome}')
+        return int(r.content)
