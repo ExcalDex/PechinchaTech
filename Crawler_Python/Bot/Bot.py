@@ -11,7 +11,7 @@ def run() -> dict:
 
         for chave in data:
             if chave == "Loja":
-                data[chave] = data[chave] + [Lojas.KABUM.name for i in range(len(data_k["Nome"]))] + [Lojas.MERCADO_LIVRE.name for i in range(len(data_ml["Nome"]))]
+                data[chave] = data[chave] + [Lojas.KABUM for i in range(len(data_k["Nome"]))] + [Lojas.MERCADO_LIVRE for i in range(len(data_ml["Nome"]))]
             else:
                 data[chave] = data[chave] + data_k[chave] + data_ml[chave]
 

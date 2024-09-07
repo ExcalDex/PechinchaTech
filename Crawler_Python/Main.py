@@ -15,7 +15,9 @@ if __name__ == "__main__":
                 data["Valor"][i],
                 data["Link"][i],
                 data["Loja"][i],
-                data["Imagem"] #Só falta o bot do Mercado livre extrair as imagens também
+                data[
+                    "Imagem"
+                ],  # Só falta o bot do Mercado livre extrair as imagens também
             )
         )
     for i in range(len(p_list)):
@@ -23,7 +25,12 @@ if __name__ == "__main__":
             p_list.pop(i)
 
     json_list = []
+    i: int = 0
     for p in p_list:
         json_list.append((p.to_dict()))
-
-    requests.post('localhost:8087/api/produto/batch', data=json.dumps(json_list))
+        i += 1
+        if i == 100: #Pode chegar a consumir 8 gigas de RAM. Por isso o limite.
+            requests.post(
+                "localhost:8087/api/produto/batch", data=json.dumps(json_list)
+            )
+            json_list.clear() #Libera memória RAM

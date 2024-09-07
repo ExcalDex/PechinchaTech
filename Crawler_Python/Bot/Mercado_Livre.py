@@ -3,15 +3,16 @@ import requests
 import aiohttp
 from lxml import html
 import re
+from typing import Any
 from Model.ManageProduto import Tipo_Produto
 
-NUMERO_DE_REQUESTS_AO_MESMO_TEMPO: int = 10000
+NUMERO_DE_REQUESTS_AO_MESMO_TEMPO: int = 100
 
 #Todo: Procurar por imagens nas páginas.
 class Scraper:
     def __init__(self, produto: Tipo_Produto) -> None:
         self.__produto: Tipo_Produto = produto
-        self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Imagem": []}
+        self.__data: dict[str, list[Any]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Imagem": []}
         self.__semaphore = asyncio.Semaphore(NUMERO_DE_REQUESTS_AO_MESMO_TEMPO)
 
     def get_produtos(self) -> dict[str, list[str]]:
@@ -115,4 +116,4 @@ class Scraper:
             self.__data["Nome"] += nomes
             self.__data["Valor"] += valores
             self.__data["Link"] += links
-            self.__data["Tipo"] += [self.__produto.name for i in range(len(nomes))]
+            self.__data["Tipo"] += [self.__produto for i in range(len(nomes))]

@@ -4,13 +4,14 @@ import requests
 from Model.ManageProduto import Tipo_Produto
 from bs4 import BeautifulSoup
 import json
+from typing import Any
 
-NUMERO_DE_REQUESTS_AO_MESMO_TEMPO: int = 10000
+NUMERO_DE_REQUESTS_AO_MESMO_TEMPO: int = 100
 
 class Scraper:
     def __init__(self, produto: Tipo_Produto) -> None:
         self.__produto: Tipo_Produto = produto
-        self.__data: dict[str, list[str]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Imagem": []}
+        self.__data: dict[str, list[Any]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Imagem": []}
         self.__semaphore = asyncio.Semaphore(NUMERO_DE_REQUESTS_AO_MESMO_TEMPO)
 
     def get_produtos(self) -> dict[str, list[str]]:
@@ -101,6 +102,6 @@ class Scraper:
                     f"https://www.kabum.com.br/produto/{produto['code']}"
                 )
 
-                self.__data["Tipo"].append(self.__produto.name)
+                self.__data["Tipo"].append(self.__produto)
 
                 self.__data["Imagem"].append(produto["image"])
