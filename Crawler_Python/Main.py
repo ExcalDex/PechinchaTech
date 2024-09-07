@@ -15,9 +15,7 @@ if __name__ == "__main__":
                 data["Valor"][i],
                 data["Link"][i],
                 data["Loja"][i],
-                data[
-                    "Imagem"
-                ],  # Só falta o bot do Mercado livre extrair as imagens também
+                data["Imagem"],  # Só falta o bot do Mercado livre extrair as imagens também
             )
         )
     for i in range(len(p_list)):

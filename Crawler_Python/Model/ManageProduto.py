@@ -89,12 +89,12 @@ class Produto:
         largest_match: int = 0
         final_model: str = ""
         curr_match: int
-        for j in range(len(Produto.__tabela_geral)):
+        for i in range(len(Produto.__tabela_geral)):
             curr_match = 0
             splitted_text: list[str] = (
-                str(Produto.__tabela_geral[j][1]).replace("-", " ").split(" ")
+                str(Produto.__tabela_geral[i][1]).replace("-", " ").split(" ")
             )
-            splitted_text.extend(str(Produto.__tabela_geral[j][3]).split())
+            splitted_text.extend(str(Produto.__tabela_geral[i][3]).split())
 
 
             for s in splitted_text:
@@ -103,7 +103,7 @@ class Produto:
 
             if curr_match > largest_match:
                 largest_match = curr_match
-                final_model = Produto.__tabela_geral[j][3]
+                final_model = Produto.__tabela_geral[i][3]
 
         return final_model
     
