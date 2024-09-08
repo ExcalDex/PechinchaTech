@@ -34,7 +34,7 @@ public class ProdutoBaseController {
 		return ResponseEntity.ok(pbService.inserir(p));
 	}
 
-    @GetMapping("/{nome}")
+    @GetMapping("/match/{nome}")
     public ResponseEntity<Long> matchNomeId(@PathVariable String nome) {
         return ResponseEntity.ok(pbService.match_id(nome));
     }

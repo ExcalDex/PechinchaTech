@@ -1,6 +1,7 @@
 package br.cefet.pechinchatech.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProdutoBase {
-    @NotBlank(message = "Insira um score!")
+    @NotNull(message = "Insira um score!")
     int score;
 
-    @NotBlank(message = "Insira um rank!")
+    @NotNull(message = "Insira um rank!")
     int rank;
 
     Long id;
@@ -21,10 +22,10 @@ public class ProdutoBase {
     @NotBlank(message = "Insira um nome!")
     String nome_benchmark;
 
-    @NotBlank(message = "Insira um tipo!")
+    @NotNull(message = "Insira um tipo!")
     TipoProduto tipo;
 
-    @NotBlank(message = "Insira um número da linha csv!")
+    @NotNull(message = "Insira um número da linha csv!")
     int csvRow;
 
     @NotBlank(message = "Insira uma marca!")
