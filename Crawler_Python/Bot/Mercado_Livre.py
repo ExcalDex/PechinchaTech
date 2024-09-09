@@ -116,5 +116,5 @@ class Scraper:
             self.__data["Nome"] += nomes
             self.__data["Valor"] += valores
             self.__data["Link"] += links
-            self.__data["Tipo"] += [self.__produto for i in range(len(nomes))]
+            self.__data["Tipo"] += [self.__produto.name for i in range(len(nomes))]
             self.__data["Imagem"] += ["" for  i in range(len(nomes))] #Refaz essa merda aq david-san

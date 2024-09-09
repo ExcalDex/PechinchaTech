@@ -102,6 +102,6 @@ class Scraper:
                     f"https://www.kabum.com.br/produto/{produto['code']}"
                 )
 
-                self.__data["Tipo"].append(self.__produto)
+                self.__data["Tipo"].append(self.__produto.name)
 
                 self.__data["Imagem"].append(produto["image"])
