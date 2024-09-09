@@ -86,22 +86,20 @@ class Produto:
         if self.__tipo == None:
             return ""
 
-        largest_match: int = 0
+        largest_match: int = 4
         final_model: str = ""
         curr_match: int
         for i in range(len(Produto.__tabela_geral)):
             curr_match = 0
             splitted_text: list[str] = (
-                str(Produto.__tabela_geral[i][1]).replace("-", " ").split(" ")
+                str(Produto.__tabela_geral[i][3]).split(" ")
             )
-            splitted_text.extend(str(Produto.__tabela_geral[i][3]).split())
-
 
             for s in splitted_text:
-                if s in nome_prov and len(s) > 1:
+                if s in nome_prov:
                     curr_match += len(s)
 
-            if curr_match > largest_match:
+            if curr_match >=largest_match:
                 largest_match = curr_match
                 final_model = Produto.__tabela_geral[i][3]
 
@@ -120,5 +118,17 @@ class Produto:
     
     
     def get_idProdutoBase(self) -> int:
-        r = requests.get(f'localhost:8087/api/produtobase/{self.__nome}')
-        return int(r.content)
+        session = session = requests.Session()
+        if not self.__nome.isspace() and len(self.__nome) > 3:
+            try:
+                r = session.get(f'http://localhost:8087/api/produtobase/match/{self.__nome}')
+                r.raise_for_status()  # Check for HTTP errors
+                try:
+                    return int(r.content)
+                except ValueError:
+                    print(f"Invalid response content: {r.content}")
+                    return -1
+            except requests.exceptions.RequestException as e:
+                print(f"Request failed: {e}")
+                return -1
+        return -1
