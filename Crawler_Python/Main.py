@@ -5,12 +5,12 @@ import requests
 from requests.adapters import HTTPAdapter
 
 
-def create_http_session():
-    adapter = HTTPAdapter()
-    session = requests.Session()
-    session.mount("http://", adapter)
-    session.mount("https://", adapter)
-    return session
+# def create_http_session():
+#     adapter = HTTPAdapter()
+#     session = requests.Session()
+#     session.mount("http://", adapter)
+#     session.mount("https://", adapter)
+#     return session
 
 
 if __name__ == "__main__":
