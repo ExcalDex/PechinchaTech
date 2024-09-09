@@ -113,8 +113,13 @@ class Scraper:
             links: list = tree.xpath(
                 f"//*[@class='ui-search-item__group__element ui-search-link__title-card ui-search-link']/@href"
             )
+
+            imagens: list = tree.xpath(
+                f"//*/img[contains(@class, 'ui-search-result-image__element')]/@src"
+            )
+
             self.__data["Nome"] += nomes
             self.__data["Valor"] += valores
             self.__data["Link"] += links
             self.__data["Tipo"] += [self.__produto.name for i in range(len(nomes))]
-            self.__data["Imagem"] += ["" for  i in range(len(nomes))] #Refaz essa merda aq david-san
+            self.__data["Imagem"] += imagens
