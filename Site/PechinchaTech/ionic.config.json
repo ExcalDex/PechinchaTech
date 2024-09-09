@@ -1,5 +1,7 @@
 {
-  "name": "ionic-app-base",
-  "integrations": {},
+  "name": "PechinchaTech",
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
