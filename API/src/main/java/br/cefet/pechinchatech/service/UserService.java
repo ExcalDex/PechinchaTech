@@ -18,6 +18,17 @@ public class UserService {
         this.uDao = jdbi.onDemand(UserDao.class);
     }
 
+    public User login(String loginStr, String password, boolean tipoDeLogin){
+        if(loginStr.isBlank() || password.isBlank() || loginStr == null || password == null){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Insira todos os dados!");
+        }
+
+        if(tipoDeLogin)
+            return uDao.loginU(loginStr, password);
+        else 
+            return uDao.loginE(loginStr, password);
+    }
+
     public User inserir(User p) {
         if (p.getId() != null) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Não insira Id!");

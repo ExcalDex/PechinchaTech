@@ -31,4 +31,10 @@ public interface UserDao {
 
     @SqlUpdate("DELETE FROM usuario WHERE id = :id")
     public int deletar(@Bind("id") Long id);
+
+    @SqlQuery("SELECT * FROM usuario WHERE username = :username AND senha = :password")
+    public User loginU(@Bind("username") String username, @Bind("password") String password);
+
+    @SqlQuery("SELECT * FROM usuario WHERE email = :email AND senha = :password")
+    public User loginE(@Bind("email") String email, @Bind("password") String password);
 }

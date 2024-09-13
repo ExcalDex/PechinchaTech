@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.cefet.pechinchatech.model.User;
 import br.cefet.pechinchatech.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -35,6 +37,17 @@ public class UserController {
 	public ResponseEntity<User> consultaUser(@PathVariable Long id) {
 		return ResponseEntity.ok(uService.consultar(id));
 	}
+
+	@GetMapping({"/nome_usuario/{username}/senha/{senha}"})
+	public ResponseEntity<User> login(@PathVariable String username, @PathVariable String senha){
+		return ResponseEntity.ok(uService.login(username, senha, true));
+	}
+
+	@GetMapping("/email/{email}/senha/{senha}")
+	public ResponseEntity<User> getMethodName(@PathVariable String email, @PathVariable String senha) {
+		return ResponseEntity.ok(uService.login(email, senha, false));
+	}
+	
 
 	@PostMapping({"/", ""})
 	public ResponseEntity<User> inserir(@Valid @RequestBody User p) {
