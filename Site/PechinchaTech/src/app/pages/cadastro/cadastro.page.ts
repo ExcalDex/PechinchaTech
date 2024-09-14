@@ -16,7 +16,7 @@ export class CadastroPage implements OnInit {
   user: User;
   formGroup: FormGroup;
 
-  passwordType: string = "password";
+  senhaType: string = "password";
   iconName: string = "eye-off";
 
   constructor(private toastController: ToastController, private navController: NavController, private formBuilder: FormBuilder, private userService: UserService) {
@@ -41,12 +41,12 @@ export class CadastroPage implements OnInit {
       return false;
     }
   }
-  togglePasswordVisibility() {
-    if (this.passwordType === "password") {
-      this.passwordType = "text";
+  toggleVisibilidadeSenha() {
+    if (this.senhaType === "password") {
+      this.senhaType = "text";
       this.iconName = "eye";
     } else {
-      this.passwordType = "password";
+      this.senhaType = "password";
       this.iconName = "eye-off";
     }
   }
@@ -56,7 +56,15 @@ export class CadastroPage implements OnInit {
     this.user.email = this.formGroup.value.email;
     this.user.senha = this.formGroup.value.senha;
     this.userService.cadastrarUser(this.user);
+    this.exibirMensagem('Usuário cadastrado com sucesso!');
     this.navController.navigateForward('login');
   }
 
+  async exibirMensagem(texto: string) {
+    const toast = await this.toastController.create({
+      message: texto,
+      duration: 1500
+    });
+    toast.present();
+  }
 }

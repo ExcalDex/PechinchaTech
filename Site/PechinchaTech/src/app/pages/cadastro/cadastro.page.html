@@ -13,8 +13,8 @@
       </ion-item>
       <ion-item class="cadastro-item">
         <ion-label position="floating">Senha</ion-label>
-        <ion-input [type]="passwordType" formControlName="senha">
-          <ion-button fill="clear" slot="end" (click)="togglePasswordVisibility()">
+        <ion-input [type]="senhaType" formControlName="senha">
+          <ion-button fill="clear" slot="end" (click)="toggleVisibilidadeSenha()">
             <ion-icon class="eyeIcon" slot="icon-only" [name]="iconName" aria-hidden="true"></ion-icon>
           </ion-button>
         </ion-input>
@@ -24,8 +24,8 @@
       </ion-label>
       <ion-item class="cadastro-item">
         <ion-label position="floating">Confirmação de Senha</ion-label>
-        <ion-input [type]="passwordType" formControlName="confirmSenha">
-          <ion-button fill="clear" slot="end" (click)="togglePasswordVisibility()">
+        <ion-input [type]="senhaType" formControlName="confirmSenha">
+          <ion-button fill="clear" slot="end" (click)="toggleVisibilidadeSenha()">
             <ion-icon class="eyeIcon" slot="icon-only" [name]="iconName" aria-hidden="true"></ion-icon>
           </ion-button>
         </ion-input>
