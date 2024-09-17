@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.cefet.pechinchatech.model.User;
 import br.cefet.pechinchatech.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @CrossOrigin
 @RestController

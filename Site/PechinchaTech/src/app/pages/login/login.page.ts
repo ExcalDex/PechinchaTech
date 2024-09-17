@@ -50,7 +50,7 @@ export class LoginPage implements OnInit {
       if (this.user) {
         this.userService.registrarUserAutenticado(this.user)
         this.exibirMensagem('Login realizado com sucesso!');
-        this.navController.navigateForward('/main');
+        window.location.href = '/main';
       }else {
         this.exibirMensagem('Email ou Senha inválidos!');
       }
@@ -59,7 +59,7 @@ export class LoginPage implements OnInit {
       if (this.user) {
         this.userService.registrarUserAutenticado(this.user);
         this.exibirMensagem('Login realizado com sucesso!');
-        this.navController.navigateForward('/main');
+        window.location.href = '/main';
       }else {
         this.exibirMensagem('Usuário ou Senha inválidos!');
       }

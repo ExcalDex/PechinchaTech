@@ -53,7 +53,7 @@ export class UserService {
     localStorage.setItem('userAutenticado', JSON.stringify(user));
   }
 
-  recuperarAutenticacao(): User {
+  getUserAutenticado(): User {
     let user = new User();
     user = JSON.parse(localStorage.getItem('userAutenticado') || '{}');
     return user;
