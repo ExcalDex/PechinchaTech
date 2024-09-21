@@ -1,7 +1,0 @@
-{
-  "name": "PechinchaTech",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
