@@ -19,12 +19,27 @@ import { Router } from '@angular/router';
 export class MainPage implements OnInit {
 
   userAutenticado: User;
+<<<<<<< HEAD
   constructor(public router: Router, private toastController: ToastController, private navController: NavController, private userService: UserService, private produtoBaseService: ProdutoBaseService, private produtoService: ProdutoService, private notifService: NotifService) { 
     this.userAutenticado = new User();
     this.userAutenticado = this.userService.getUserAutenticado();
   }
 
   ngOnInit() {
+=======
+  produtos: Produto[];
+
+  constructor(public router: Router, private toastController: ToastController, private navController: NavController, private userService: UserService, private produtoBaseService: ProdutoBaseService, private produtoService: ProdutoService, private notifService: NotifService) { 
+    this.userAutenticado = new User();
+    this.produtos = [];
+  }
+
+  ngOnInit() {
+    this.userAutenticado = this.userService.getUserAutenticado();
+  }
+
+  async ionViewWillEnter() {
+>>>>>>> 9ac4af2cce610e5be57a3e4583a90fbcb5e61161
     this.carregarListaProdutos();
   }
 
@@ -41,6 +56,15 @@ export class MainPage implements OnInit {
   }
 
   async carregarListaProdutos() {
+<<<<<<< HEAD
 
+=======
+    this.produtos =  await this.produtoService.listarProdutos();
+    console.log(this.produtos);
+  }
+
+  formatarPreco(preco: number) {
+    return preco.toFixed(2).replace('.', ',');
+>>>>>>> 9ac4af2cce610e5be57a3e4583a90fbcb5e61161
   }
 }
