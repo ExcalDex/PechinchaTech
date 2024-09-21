@@ -17,7 +17,7 @@ public class ProdutoBase {
     @NotNull(message = "Insira um rank!")
     int rank;
 
-    Long id;
+    Long idProdutoBase;
 
     @NotBlank(message = "Insira um nome!")
     String nome_benchmark;

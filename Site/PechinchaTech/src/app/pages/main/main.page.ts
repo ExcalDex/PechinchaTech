@@ -19,12 +19,18 @@ import { Router } from '@angular/router';
 export class MainPage implements OnInit {
 
   userAutenticado: User;
+  produtos: Produto[];
+
   constructor(public router: Router, private toastController: ToastController, private navController: NavController, private userService: UserService, private produtoBaseService: ProdutoBaseService, private produtoService: ProdutoService, private notifService: NotifService) { 
     this.userAutenticado = new User();
-    this.userAutenticado = this.userService.getUserAutenticado();
+    this.produtos = [];
   }
 
   ngOnInit() {
+    this.userAutenticado = this.userService.getUserAutenticado();
+  }
+
+  async ionViewWillEnter() {
     this.carregarListaProdutos();
   }
 
@@ -41,6 +47,11 @@ export class MainPage implements OnInit {
   }
 
   async carregarListaProdutos() {
+    this.produtos =  await this.produtoService.listarProdutos();
+    console.log(this.produtos);
+  }
 
+  formatarPreco(preco: number) {
+    return preco.toFixed(2).replace('.', ',');
   }
 }

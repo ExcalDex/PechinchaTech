@@ -38,19 +38,38 @@
 </ion-header>
 
 <ion-content>
-    <ion-searchbar class="content" show-clear-button="focus" placeholder="Pesquisar por produto...">
-        <ion-button shape="round" class="content" size="medium" slot="start">
-            <ion-icon slot="icon-only" name="reorder-three-outline"></ion-icon>
-        </ion-button>
-    </ion-searchbar>
+    <div class="searchbar-container">
+        <ion-searchbar class="content" show-clear-button="focus" placeholder="Pesquisar por produto...">
+            <ion-button id="click-trigger" shape="round" class="content" size="medium" slot="start">
+                <ion-icon slot="icon-only" name="reorder-three-outline"></ion-icon>
+            </ion-button>
+            <ion-popover trigger="click-trigger" triggerAction="click">
+                <ng-template>
+                    <ion-list lines="none">
+                        <ion-button expand="full" class="popover-content">CPU / Processador</ion-button>
+                        <ion-button expand="full" class="popover-content">GPU / Placa de Vídeo</ion-button>
+                        <ion-button expand="full" class="popover-content">GPU / Placa de Vídeo</ion-button>
+                        <ion-button expand="full" class="popover-content">Memória Ram</ion-button>
+                        <ion-button expand="full" class="popover-content">SSD</ion-button>
+                        <ion-button expand="full" class="popover-content">HDD / Disco Rígido</ion-button>
+                    </ion-list>
+                </ng-template>
+            </ion-popover>
+        </ion-searchbar>
+    </div>
 
     <ion-list>
+        <ion-row>
+            <ion-col size="2" *ngFor="let produto of produtos">
+                <ion-card color="dark" class="content produto-card" routerLink="/produto/{{produto.id}}">
+                    <img class="produto-img" src="{{produto.link_imagem}}" alt="{{produto.nome}}">
+                    <ion-card-title class="produto-nome">{{ produto.nome }}</ion-card-title>
+                    <ion-card-title class="produto-preco">R${{ formatarPreco(produto.preco) }}</ion-card-title>
+                </ion-card>
+            </ion-col>
+        </ion-row>>
         <ion-item>
-            <ion-card class="content">
-                <img>
-                <ion-card-title></ion-card-title>
-                <ion-card-subtitle></ion-card-subtitle>
-            </ion-card>
+
         </ion-item>
     </ion-list>
 </ion-content>

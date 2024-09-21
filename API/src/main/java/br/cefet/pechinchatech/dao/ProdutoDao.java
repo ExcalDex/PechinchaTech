@@ -18,7 +18,7 @@ public interface ProdutoDao {
 
     @GetGeneratedKeys
     @SqlUpdate(" insert into produto (nome, preco, link, loja, tipo, id_produto_base, link_imagem) "
-            + " values (:nome, :preco, :link, :loja, :tipoProduto, :idProdutoBase, :imageLink);")
+            + " values (:nome, :preco, :link, :loja, :tipo, :id_produto_base, :link_imagem);")
     public Long inserir(@BindBean Produto p);
 
     @SqlQuery("SELECT * FROM produto;")
@@ -27,7 +27,7 @@ public interface ProdutoDao {
     @SqlQuery("SELECT * FROM produto WHERE produto.id = :id;")
     public Produto consultar(@Bind("id") Long id);
 
-    @SqlUpdate("UPDATE produto SET nome = :nome, preco = :preco, link = :link, loja = :loja, tipo = :tipoProduto, id_produto_base = :idProdutoBase WHERE id = :id;")
+    @SqlUpdate("UPDATE produto SET nome = :nome, preco = :preco, link = :link, loja = :loja, tipo = :tipo, id_produto_base = :idProdutoBase, link_imagem = :link_imagem WHERE id = :id;")
     public int alterar(@BindBean Produto p);
 
     @SqlUpdate("DELETE FROM produto WHERE id = :id;")

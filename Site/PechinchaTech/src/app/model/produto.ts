@@ -19,6 +19,7 @@ export class Produto {
     loja: Loja;
     tipo: Tipo;
     id_produto_base: number;
+    link_imagem: string;
 
     constructor() {
         this.id = 0;
@@ -28,6 +29,7 @@ export class Produto {
         this.loja = Loja.KABUM;
         this.tipo = Tipo.SSD;
         this.id_produto_base = 0;
+        this.link_imagem = "";
     }
 
 }

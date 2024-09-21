@@ -15,8 +15,12 @@ from requests.adapters import HTTPAdapter
 
 if __name__ == "__main__":
     data = Bot.run()  # Dados puros dos produtos
+    new_data = []
+    for i in range(len(data["Nome"])):
+        produto = {"nome": data["Nome"][i], "preco": data["Valor"][i], "link": data["Link"][i], "tipo": data["Tipo"][i], "loja": data["Loja"][i], "link_imagem": data["Imagem"][i]}
+        new_data.append(produto)
     with open("teste.json", "w", encoding="utf-8") as f:
-        f.write(json.dumps(data))
+        f.write(json.dumps(new_data, indent=6))
     # p_list: list[Produto] = []
     # for i in range(len(data["Nome"])):
     #     p_list.append(

@@ -3,6 +3,55 @@
 }
 
 .content {
+    --background: #ECE6F0 !important;
+    color: black !important;
+}
+
+.searchbar-container {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+ion-searchbar {
+    max-width: 540px;
+    width: 100%;
+    --border-radius: 20px;
+}
+
+.popover-content {
     --background: #ECE6F0;
+    padding: 0%;
     color: black;
+}
+
+.produto-img {
+    width: 100%;
+    height: 284px;
+}
+
+.popover-viewport {
+    --background: #ECE6F0 !important;
+}
+
+.produto-card {
+    transition: all 0.2s ease-in-out;
+}
+
+.produto-card:hover {
+    transform: scale(1.1);
+}
+
+.produto-nome {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.produto-preco {
+    color: #00FF00 !important;
 }
