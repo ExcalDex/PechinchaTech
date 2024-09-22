@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+      <ion-title>
+          PechinchaTech
+      </ion-title>
+      <ion-buttons slot="end">
+          <ion-button fill="clear" color="dark" routerLink="/main" [disabled]="router.url === '/main'">
+              Pesquisar Produto
+          </ion-button>
+          <ion-button fill="clear" color="dark" routerLink="/benchmark" [disabled]="router.url === '/benchmark'">
+              Benchmark
+          </ion-button>
+      </ion-buttons>
+      <ion-buttons *ngIf="!verificaUserAutenticado()" slot="end">
+          <ion-button fill="outline" routerLink="/login">
+              <ion-icon slot="end" name="log-in-outline"></ion-icon>
+              Login
+          </ion-button>
+          <ion-button fill="outline" routerLink="/cadastro">
+              <ion-icon slot="end" name="person-add-outline"></ion-icon>
+              Cadastro
+          </ion-button>
+      </ion-buttons>
+      <ion-buttons *ngIf="verificaUserAutenticado()" slot="end">
+          <ion-button slot="end" size="large" fill="clear">
+              <ion-icon slot="icon-only" color="dark" name="notifications-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button slot="end" size="large" fill="clear">
+              <ion-icon slot="icon-only" color="dark" name="person-circle-outline"></ion-icon>
+          </ion-button>
+          
+          <!-- Botão provisório para logoff -->
+          <ion-button slot="end" size="large" fill="clear" (click)="encerrarSessao()">
+              <ion-icon slot="icon-only" color="dark" name="log-out-outline"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>

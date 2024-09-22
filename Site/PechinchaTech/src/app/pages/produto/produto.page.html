@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-title>
+      PechinchaTech
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" color="dark" routerLink="/main" [disabled]="router.url === '/main'">
+        Pesquisar Produto
+      </ion-button>
+      <ion-button fill="clear" color="dark" routerLink="/benchmark" [disabled]="router.url === '/benchmark'">
+        Benchmark
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons *ngIf="!verificaUserAutenticado()" slot="end">
+      <ion-button fill="outline" routerLink="/login">
+        <ion-icon slot="end" name="log-in-outline"></ion-icon>
+        Login
+      </ion-button>
+      <ion-button fill="outline" routerLink="/cadastro">
+        <ion-icon slot="end" name="person-add-outline"></ion-icon>
+        Cadastro
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons *ngIf="verificaUserAutenticado()" slot="end">
+      <ion-button slot="end" size="large" fill="clear">
+        <ion-icon slot="icon-only" color="dark" name="notifications-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button slot="end" size="large" fill="clear">
+        <ion-icon slot="icon-only" color="dark" name="person-circle-outline"></ion-icon>
+      </ion-button>
+      <!-- Botão provisório para logoff -->
+      <ion-button slot="end" size="large" fill="clear" (click)="encerrarSessao()">
+        <ion-icon slot="icon-only" color="dark" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="searchbar-container">
+    <ion-searchbar class="content" show-clear-button="focus" placeholder="Pesquisar por produto...">
+      <ion-button id="click-trigger" shape="round" class="content" size="medium" slot="start">
+        <ion-icon slot="icon-only" name="reorder-three-outline"></ion-icon>
+      </ion-button>
+      <ion-popover trigger="click-trigger" triggerAction="click">
+        <ng-template>
+          <ion-list lines="none">
+            <ion-button expand="full" class="popover-content">CPU / Processador</ion-button>
+            <ion-button expand="full" class="popover-content">GPU / Placa de Vídeo</ion-button>
+            <ion-button expand="full" class="popover-content">GPU / Placa de Vídeo</ion-button>
+            <ion-button expand="full" class="popover-content">Memória Ram</ion-button>
+            <ion-button expand="full" class="popover-content">SSD</ion-button>
+            <ion-button expand="full" class="popover-content">HDD / Disco Rígido</ion-button>
+          </ion-list>
+        </ng-template>
+      </ion-popover>
+    </ion-searchbar>
+  </div>
+</ion-content>

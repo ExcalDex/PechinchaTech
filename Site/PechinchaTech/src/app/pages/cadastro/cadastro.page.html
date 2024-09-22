@@ -1,0 +1,42 @@
+<ion-content class="cadastro-background">
+  <form [formGroup]="formGroup" (ngSubmit)="cadastrarUser()">
+    <div class="cadastro-container">
+      <ion-icon name="person-add-outline" class="cadastro-icon"></ion-icon>
+      <h1 class="cadastro-title">Cadastro</h1>
+      <ion-item class="cadastro-item">
+        <ion-label position="floating">Nome de Usuário</ion-label>
+        <ion-input type="Username" formControlName="username"></ion-input>
+      </ion-item>
+      <ion-item class="cadastro-item">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item class="cadastro-item">
+        <ion-label position="floating">Senha</ion-label>
+        <ion-input [type]="senhaType" formControlName="senha">
+          <ion-button fill="clear" slot="end" (click)="toggleVisibilidadeSenha()">
+            <ion-icon class="eyeIcon" slot="icon-only" [name]="iconName" aria-hidden="true"></ion-icon>
+          </ion-button>
+        </ion-input>
+      </ion-item>
+      <ion-label>
+        <p *ngIf="!senhasBatem()" slot="start" class="error-message">As senhas não batem!</p>
+      </ion-label>
+      <ion-item class="cadastro-item">
+        <ion-label position="floating">Confirmação de Senha</ion-label>
+        <ion-input [type]="senhaType" formControlName="confirmSenha">
+          <ion-button fill="clear" slot="end" (click)="toggleVisibilidadeSenha()">
+            <ion-icon class="eyeIcon" slot="icon-only" [name]="iconName" aria-hidden="true"></ion-icon>
+          </ion-button>
+        </ion-input>
+      </ion-item>
+      <ion-label>
+        <p *ngIf="!senhasBatem()" class="error-message">As senhas não batem!</p>
+      </ion-label>
+      <ion-button expand="block" class="cadastro-button" type="submit" [disabled]="formGroup.invalid || !senhasBatem()">Cadastrar</ion-button>
+      <ion-card-content>
+        <a class="linkzin" routerLink="/login">Já possui uma conta? Faça login!</a>
+      </ion-card-content>
+    </div>
+  </form>
+</ion-content>

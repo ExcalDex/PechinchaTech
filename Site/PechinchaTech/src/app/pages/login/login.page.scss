@@ -1,0 +1,47 @@
+.linkzin {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.login-background {
+  --background: #121212;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 40px;
+  background-color: #1e1e1e;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border: 2px solid #007FFF;
+  text-align: center;
+}
+
+.login-icon {
+  font-size: 4rem;
+  color: #ffffff;
+}
+
+.login-title {
+  color: #ffffff;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.login-item {
+  --background: transparent;
+  --color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  --background: #007FFF;
+  --color: #ffffff;
+  border-radius: 5px;
+}
+
+.eyeIcon {
+  color: #007FFF;
+}

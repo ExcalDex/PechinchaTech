@@ -3,6 +3,10 @@ from enum import Enum
 import numpy
 from typing import Any
 import requests
+import difflib
+import nltk
+nltk.download('punkt_tab')
+import string
 
 
 class Lojas(Enum):
@@ -39,17 +43,23 @@ class Produto:
     __tabela_geral: numpy.ndarray
 
     def __init__(
-        self, nome_prov: str, tipo: Tipo_Produto, valor: float, link: str, loja: Lojas, link_img: str
+        self,
+        nome_prov: str,
+        tipo: str,
+        valor: float,
+        link: str,
+        loja: str,
+        link_img: str,
     ) -> None:
-        self.__tipo: Tipo_Produto = tipo
+        self.__tipo: str = tipo
         self.__valor: float = valor
         self.__link: str = link
-        self.__loja: Lojas = loja
+        self.__loja: str = loja
         self.__nome: str = self.__identificar_produto(nome_prov)
         self.__link_img: str = link_img
 
     def get_tipo(self) -> str:
-        return self.__tipo.name
+        return self.__tipo
 
     def get_valor(self) -> float:
         return self.__valor
@@ -58,70 +68,74 @@ class Produto:
         return self.__link
 
     def get_loja(self) -> str:
-        return self.__loja.name
+        return self.__loja
 
     def get_nome(self) -> str:
         return self.__nome
-    
+
     def get_img(self) -> str:
         return self.__link_img
 
-    def __identificar_produto(self, nome_prov: str) -> str:
+    def __preprocess(self, text: str) -> str:
+        text = text.lower()
+        text = text.translate(str.maketrans("", "", string.punctuation))
+        # Tokenize
+        tokens = nltk.word_tokenize(text)
+        return " ".join(tokens)
 
-        if self.__tipo == Tipo_Produto.CPU:
+    def __identificar_produto(self, nome_prov: str) -> str:
+        if self.__tipo == Tipo_Produto.CPU.name:
             Produto.__tabela_geral = Produto.__tabela_cpu.to_numpy()
 
-        if self.__tipo == Tipo_Produto.GPU:
+        if self.__tipo == Tipo_Produto.GPU.name:
             Produto.__tabela_geral = Produto.__tabela_gpu.to_numpy()
 
-        if self.__tipo == Tipo_Produto.HDD:
+        if self.__tipo == Tipo_Produto.HDD.name:
             Produto.__tabela_geral = Produto.__tabela_hdd.to_numpy()
 
-        if self.__tipo == Tipo_Produto.RAM:
+        if self.__tipo == Tipo_Produto.RAM.name:
             Produto.__tabela_geral = Produto.__tabela_ram.to_numpy()
 
-        if self.__tipo == Tipo_Produto.SSD:
+        if self.__tipo == Tipo_Produto.SSD.name:
             Produto.__tabela_geral = Produto.__tabela_ssd.to_numpy()
 
         if self.__tipo == None:
             return ""
 
-        largest_match: int = 4
-        final_model: str = ""
-        curr_match: int
-        for i in range(len(Produto.__tabela_geral)):
-            curr_match = 0
-            splitted_text: list[str] = (
-                str(Produto.__tabela_geral[i][3]).split(" ")
-            )
+        lista_nomes_produtos_base: list[str] = []
+        for p in Produto.__tabela_geral:
+            lista_nomes_produtos_base.append(p[3])
+        lista_nomes_produtos_base = [
+            self.__preprocess(name) for name in lista_nomes_produtos_base
+        ]
+        best_match: str = ''
+        highest_score: float = 0
+        for p in lista_nomes_produtos_base:
+            score: float = difflib.SequenceMatcher(None, nome_prov, p).ratio()
+            if score > highest_score:
+                highest_score = score
+                best_match = p
 
-            for s in splitted_text:
-                if s in nome_prov:
-                    curr_match += len(s)
+        return best_match
 
-            if curr_match >=largest_match:
-                largest_match = curr_match
-                final_model = Produto.__tabela_geral[i][3]
-
-        return final_model
-    
     def to_dict(self) -> dict[str, Any]:
         return {
-            'nome' : self.get_nome(),
-            'preco' : self.get_valor(),
-            'link' : self.get_link(),
-            'loja' : self.get_loja(),
-            'tipoProduto' : self.get_tipo(),
-            'idProdutoBase' : self.get_idProdutoBase(),
-            'imageLink' : self.get_img()
+            "nome": self.get_nome(),
+            "preco": self.get_valor(),
+            "link": self.get_link(),
+            "loja": self.get_loja(),
+            "tipoProduto": self.get_tipo(),
+            "idProdutoBase": self.get_idProdutoBase(),
+            "imageLink": self.get_img(),
         }
-    
-    
+
     def get_idProdutoBase(self) -> int:
         session = session = requests.Session()
         if not self.__nome.isspace() and len(self.__nome) > 3:
             try:
-                r = session.get(f'http://localhost:8087/api/produtobase/match/{self.__nome}')
+                r = session.get(
+                    f"http://localhost:8087/api/produtobase/match/{self.__nome}"
+                )
                 r.raise_for_status()  # Check for HTTP errors
                 try:
                     return int(r.content)
