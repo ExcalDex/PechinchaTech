@@ -8,11 +8,17 @@ from Model.ManageProduto import Tipo_Produto
 
 NUMERO_DE_REQUESTS_AO_MESMO_TEMPO: int = 100
 
-#Todo: Procurar por imagens nas páginas.
+
 class Scraper:
     def __init__(self, produto: Tipo_Produto) -> None:
         self.__produto: Tipo_Produto = produto
-        self.__data: dict[str, list[Any]] = {"Nome": [], "Valor": [], "Link": [], "Tipo": [], "Imagem": []}
+        self.__data: dict[str, list[Any]] = {
+            "Nome": [],
+            "Valor": [],
+            "Link": [],
+            "Tipo": [],
+            "Imagem": [],
+        }
         self.__semaphore = asyncio.Semaphore(NUMERO_DE_REQUESTS_AO_MESMO_TEMPO)
 
     def get_produtos(self) -> dict[str, list[str]]:
@@ -26,12 +32,11 @@ class Scraper:
             "Valor": self.__data["Valor"].copy(),
             "Link": self.__data["Link"].copy(),
             "Tipo": self.__data["Tipo"].copy(),
-            "Imagem": self.__data["Imagem"].copy()
+            "Imagem": self.__data["Imagem"].copy(),
         }
 
     def set_produto(self, produto: Tipo_Produto) -> None:
         self.__produto = produto
-
 
     async def __fetch(self, session, url: str) -> str:
         """Função para limitar o número de requisições web assíncronas ao mesmo tempo (alguns sites tem limite de acessos)

@@ -75,7 +75,7 @@ class Scraper:
 
         async with aiohttp.ClientSession() as session:
             for i in range(1, qtd_pages + 1):
-                url: str = f"{page.url}?&page_number={i}&facet_filters=&sort=-price"
+                url: str = f"{page.url}?&page_number={i}"
                 tasks.append(self.__fetch(session, url))
             responses = await asyncio.gather(*tasks)
 
