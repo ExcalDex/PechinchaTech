@@ -1,14 +1,14 @@
 enum Loja {
-    "KABUM",
-    "MERCADO_LIVRE"
+    KABUM  = "KABUM",
+    MERCADO_LIVRE = "MERCADO_LIVRE"
 }
 
-enum Tipo {
-    "SSD",
-    "HDD",
-    "GPU",
-    "CPU",
-    "RAM"
+export enum Tipo {
+    SSD = "SSD",
+    HDD = "HDD",
+    GPU = "GPU",
+    CPU = "CPU",
+    RAM = "RAM"
 }
 
 export class Produto {
