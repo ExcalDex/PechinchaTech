@@ -3,10 +3,6 @@ from enum import Enum
 import numpy
 from typing import Any
 import requests
-import difflib
-import nltk
-nltk.download('punkt_tab')
-import string
 
 
 class Lojas(Enum):
@@ -76,13 +72,6 @@ class Produto:
     def get_img(self) -> str:
         return self.__link_img
 
-    def __preprocess(self, text: str) -> str:
-        text = text.lower()
-        text = text.translate(str.maketrans("", "", string.punctuation))
-        # Tokenize
-        tokens = nltk.word_tokenize(text)
-        return " ".join(tokens)
-
     def __identificar_produto(self, nome_prov: str) -> str:
         if self.__tipo == Tipo_Produto.CPU.name:
             Produto.__tabela_geral = Produto.__tabela_cpu.to_numpy()
@@ -102,31 +91,29 @@ class Produto:
         if self.__tipo == None:
             return ""
 
-        lista_nomes_produtos_base: list[str] = []
+        match: str = ""
+        contador: int
         for p in Produto.__tabela_geral:
-            lista_nomes_produtos_base.append(p[3])
-        lista_nomes_produtos_base = [
-            self.__preprocess(name) for name in lista_nomes_produtos_base
-        ]
-        best_match: str = ''
-        highest_score: float = 0
-        for p in lista_nomes_produtos_base:
-            score: float = difflib.SequenceMatcher(None, nome_prov, p).ratio()
-            if score > highest_score:
-                highest_score = score
-                best_match = p
+            contador = 0
+            nome_prod: list[str] = p[3].split(" ")
+            for s in nome_prod:
+                if s in nome_prov:
+                    contador += 1
+            if contador == len(nome_prod):
+                match = p[3]
+                break
 
-        return best_match
+        return match
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "nome": self.get_nome(),
-            "preco": self.get_valor(),
             "link": self.get_link(),
+            "preco": self.get_valor(),
             "loja": self.get_loja(),
-            "tipoProduto": self.get_tipo(),
-            "idProdutoBase": self.get_idProdutoBase(),
-            "imageLink": self.get_img(),
+            "tipo": self.get_tipo(),
+            "id_produto_base": self.get_idProdutoBase(),
+            "link_imagem": self.get_img(),
         }
 
     def get_idProdutoBase(self) -> int:
@@ -136,7 +123,7 @@ class Produto:
                 r = session.get(
                     f"http://localhost:8087/api/produtobase/match/{self.__nome}"
                 )
-                r.raise_for_status()  # Check for HTTP errors
+                r.raise_for_status()
                 try:
                     return int(r.content)
                 except ValueError:
