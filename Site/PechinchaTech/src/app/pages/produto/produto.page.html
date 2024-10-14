@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar class="toolbar">
+    <img slot="start" style="margin-left:10px; width: 33px; height: 33px;" src="assets/icon/skibididup.png">
     <ion-title>
       PechinchaTech
     </ion-title>
@@ -38,23 +39,8 @@
 </ion-header>
 
 <ion-content>
-  <div class="searchbar-container">
-    <ion-searchbar class="content" show-clear-button="focus" placeholder="Pesquisar por produto...">
-      <ion-button id="click-trigger" shape="round" class="content" size="medium" slot="start">
-        <ion-icon slot="icon-only" name="reorder-three-outline"></ion-icon>
-      </ion-button>
-      <ion-popover trigger="click-trigger" triggerAction="click">
-        <ng-template>
-          <ion-list lines="none">
-            <ion-button expand="full" class="popover-content">CPU / Processador</ion-button>
-            <ion-button expand="full" class="popover-content">GPU / Placa de Vídeo</ion-button>
-            <ion-button expand="full" class="popover-content">GPU / Placa de Vídeo</ion-button>
-            <ion-button expand="full" class="popover-content">Memória Ram</ion-button>
-            <ion-button expand="full" class="popover-content">SSD</ion-button>
-            <ion-button expand="full" class="popover-content">HDD / Disco Rígido</ion-button>
-          </ion-list>
-        </ng-template>
-      </ion-popover>
-    </ion-searchbar>
+  <div class="produto-data">
+    <img src="{{produto.link_imagem}}" class="produto-img">
+    <ion-title class="produto-nome">{{produto.nome}}</ion-title>
   </div>
 </ion-content>
