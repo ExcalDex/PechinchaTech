@@ -7,7 +7,7 @@ import json
 
 if __name__ == "__main__":
     benchmark_dir: str = f"{os.getcwd()}\\benchmark"
-    tipo_tup: tuple = ("CPU", "GPU", "HDD", "RAM", "SSD")
+    tipo_tup: tuple = ("CPU", "GPU", "HDD", "SSD")
     for tipo in tipo_tup:
         tabela: pd.DataFrame = pd.read_csv(
             f"{benchmark_dir}\\{tipo}_UserBenchmarks.csv"

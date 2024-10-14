@@ -4,6 +4,5 @@ public enum TipoProduto {
     SSD,
     HDD,
     GPU,
-    CPU,
-    RAM
+    CPU
 }

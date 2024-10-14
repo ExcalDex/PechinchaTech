@@ -60,8 +60,6 @@ class Scraper:
             produto = "placas/placa-video/placa-de-video"
         if self.__produto == Tipo_Produto.HDD:
             produto = "discos-acessorios/hds-ssds/hd"
-        if self.__produto == Tipo_Produto.RAM:
-            produto = "memorias-ram/ram"
         if self.__produto == Tipo_Produto.SSD:
             produto = "discos-acessorios/hds-ssds/ssd"
 

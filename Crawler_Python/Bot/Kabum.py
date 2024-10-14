@@ -62,8 +62,6 @@ class Scraper:
             produto = "placa-de-video-vga"
         if self.__produto == Tipo_Produto.HDD:
             produto = "disco-rigido-hd"
-        if self.__produto == Tipo_Produto.RAM:
-            produto = "memoria-ram"
         if self.__produto == Tipo_Produto.SSD:
             produto = "ssd-2-5"
         page = requests.get(

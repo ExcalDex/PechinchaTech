@@ -14,8 +14,7 @@ class Tipo_Produto(Enum):
     CPU = (1,)
     GPU = (2,)
     HDD = (3,)
-    RAM = (4,)
-    SSD = 5
+    SSD = 4
 
 
 class Produto:
@@ -29,9 +28,6 @@ class Produto:
     )
     __tabela_hdd: pd.DataFrame = pd.read_csv(
         f"{__benchmark_dir}\\HDD_UserBenchmarks.csv"
-    )
-    __tabela_ram: pd.DataFrame = pd.read_csv(
-        f"{__benchmark_dir}\\RAM_UserBenchmarks.csv"
     )
     __tabela_ssd: pd.DataFrame = pd.read_csv(
         f"{__benchmark_dir}\\SSD_UserBenchmarks.csv"
@@ -81,9 +77,6 @@ class Produto:
 
         if self.__tipo == Tipo_Produto.HDD.name:
             Produto.__tabela_geral = Produto.__tabela_hdd.to_numpy()
-
-        if self.__tipo == Tipo_Produto.RAM.name:
-            Produto.__tabela_geral = Produto.__tabela_ram.to_numpy()
 
         if self.__tipo == Tipo_Produto.SSD.name:
             Produto.__tabela_geral = Produto.__tabela_ssd.to_numpy()
