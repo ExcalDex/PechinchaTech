@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar class="toolbar">
-    <img slot="start" style="margin-left:10px; width: 33px; height: 33px;" src="assets/icon/skibididup.png">
     <ion-title>
       PechinchaTech
     </ion-title>
@@ -39,19 +38,23 @@
 </ion-header>
 
 <ion-content>
-
-  <div class="container produto-data">
-    <img src="{{produto.link_imagem}}" class="produto-img">
-    <div>
-      <h1 class="produto-nome">{{produto.nome}}</h1>
-      <h1 class="produto-preco">R${{produto.preco}}</h1>
-      <ion-button class="produto-botao" size="large" color="dark" href="{{produto.link}}" >
-        <img *ngIf="produto.loja == 'KABUM'" class="store-badge" style="width: 50px; height: 50px"
-          src="assets/icon/kabum.png">
-        <img *ngIf="produto.loja == 'MERCADO_LIVRE'" class="store-badge" style="width: 24px; height: 24px"
-          src="assets/icon/mercado_livre.png">
-        <p class="botao-text">Acessar na loja</p>
+  <div class="searchbar-container">
+    <ion-searchbar class="content" show-clear-button="focus" placeholder="Pesquisar por produto...">
+      <ion-button id="click-trigger" shape="round" class="content" size="medium" slot="start">
+        <ion-icon slot="icon-only" name="reorder-three-outline"></ion-icon>
       </ion-button>
-    </div>
+      <ion-popover trigger="click-trigger" triggerAction="click">
+        <ng-template>
+          <ion-list lines="none">
+            <ion-button expand="full" class="popover-content">CPU / Processador</ion-button>
+            <ion-button expand="full" class="popover-content">GPU / Placa de Vídeo</ion-button>
+            <ion-button expand="full" class="popover-content">GPU / Placa de Vídeo</ion-button>
+            <ion-button expand="full" class="popover-content">Memória Ram</ion-button>
+            <ion-button expand="full" class="popover-content">SSD</ion-button>
+            <ion-button expand="full" class="popover-content">HDD / Disco Rígido</ion-button>
+          </ion-list>
+        </ng-template>
+      </ion-popover>
+    </ion-searchbar>
   </div>
 </ion-content>
