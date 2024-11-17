@@ -5,6 +5,7 @@ from lxml import html
 import re
 from typing import Any
 from Model.ManageProduto import Tipo_Produto
+from bs4 import BeautifulSoup
 
 NUMERO_DE_REQUESTS_AO_MESMO_TEMPO: int = 100
 
@@ -63,39 +64,35 @@ class Scraper:
         if self.__produto == Tipo_Produto.SSD:
             produto = "discos-acessorios/hds-ssds/ssd"
 
-        page = requests.get(
-            f"https://lista.mercadolivre.com.br/informatica/componentes-pc/{produto}_Desde_48_NoIndex_True"
-        )
-        tree = html.fromstring(page.content)
-        qtd_pages = 1
-
-        for i in range(2, 13):
-            temp_last_page = tree.xpath(
-                f"/html/body/main/div/div[3]/section/nav/ul/li[{i}]/a/@href"
-            )
-            if not temp_last_page:
-                qtd_pages = i - 3
-                break
-            elif i >= 12:
-                page_10 = requests.get(f"{page.url}_Desde_433_NoIndex_True")
-                qtd_pages = html.fromstring(page_10.content).xpath(
-                    f"/html/body/main/div/div[3]/section/nav/ul/li[16]/a/text()"
-                )
-                qtd_pages = int(qtd_pages[0])
-
         tasks = []
         async with aiohttp.ClientSession() as session:
-            for i in range(1, qtd_pages + 1):
-                url: str = f"{page.url}_Desde_{i * 48}_NoIndex_True"
+            for i in range(1, 43):
+                url: str = f"https://lista.mercadolivre.com.br/informatica/componentes-pc/{produto}_Desde_{((i-1) * 48) + 1}_NoIndex_True"
                 tasks.append(self.__fetch(session, url))
             responses = await asyncio.gather(*tasks)
 
         for page in responses:
-            tree = html.fromstring(page)
-            nomes: list = tree.xpath(f"//*[@class='ui-search-item__title']/text()")
-            valores: list = tree.xpath(
-                f"//*/div[(@class='ui-search-item__group__element ui-search-price__part-without-link') or (@class='ui-search-item__group ui-search-item__group--pds')]/div[(@class='ui-search-price ui-search-price--size-x-tiny ui-search-item__pds-best-price ui-search-item__group__element ui-search-color--black') or (@class='ui-search-price ui-search-price--size-medium')]/div[@class='ui-search-price__second-line']/span[@aria-roledescription='Preço']/@aria-label"
-            )
+            bs_page = BeautifulSoup(page, "html.parser")
+            products = bs_page.find_all('li', class_='ui-search-layout__item')
+            
+            nomes: list = []
+            valores: list = []
+            links: list = []
+            imagens: list = []
+
+            for product in products:
+                h2 = product.find('h2', class_='poly-box poly-component__title')
+                a = h2.find('a')
+                div = product.find('div', class_='poly-price__current')
+                span = div.find('span', class_='andes-money-amount andes-money-amount--cents-superscript')
+                img = product.find('img', class_='poly-component__picture')
+                
+                nomes.append(a.text)
+                valores.append(span.get('aria-label'))
+                links.append(a.get('href'))
+                imagens.append(img.get('src'))
+
+            
             for j in range(len(valores)):
                 valores[j] = (
                     valores[j]
@@ -113,13 +110,6 @@ class Scraper:
                     centavos = int(numeros[1])
                 valores[j] = reais + (centavos / 100)
 
-            links: list = tree.xpath(
-                f"//*[@class='ui-search-item__group__element ui-search-link__title-card ui-search-link']/@href"
-            )
-
-            imagens: list = tree.xpath(
-                f"//*/img[contains(@class, 'ui-search-result-image__element')]/@src"
-            )
 
             self.__data["Nome"] += nomes
             self.__data["Valor"] += valores
