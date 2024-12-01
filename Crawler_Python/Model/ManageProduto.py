@@ -3,6 +3,7 @@ from enum import Enum
 import numpy
 from typing import Any
 import requests
+from fuzzywuzzy import process
 
 
 class Lojas(Enum):
@@ -70,33 +71,38 @@ class Produto:
 
     def __identificar_produto(self, nome_prov: str) -> str:
         if self.__tipo == Tipo_Produto.CPU.name:
-            Produto.__tabela_geral = Produto.__tabela_cpu.to_numpy()
+            Produto.__tabela_geral = Produto.__tabela_cpu["Model"]#.to_numpy()#.dropna().tolist()
 
         if self.__tipo == Tipo_Produto.GPU.name:
-            Produto.__tabela_geral = Produto.__tabela_gpu.to_numpy()
+            Produto.__tabela_geral = Produto.__tabela_gpu["Model"]#.to_numpy()#.dropna().tolist()
 
         if self.__tipo == Tipo_Produto.HDD.name:
-            Produto.__tabela_geral = Produto.__tabela_hdd.to_numpy()
+            Produto.__tabela_geral = Produto.__tabela_hdd["Model"]#.to_numpy()#.dropna().tolist()
 
         if self.__tipo == Tipo_Produto.SSD.name:
-            Produto.__tabela_geral = Produto.__tabela_ssd.to_numpy()
+            Produto.__tabela_geral = Produto.__tabela_ssd["Model"]#.to_numpy()#.dropna().tolist()
 
         if self.__tipo == None:
             return ""
 
-        match: str = ""
-        contador: int
-        for p in Produto.__tabela_geral:
-            contador = 0
-            nome_prod: list[str] = p[3].split(" ")
-            for s in nome_prod:
-                if s in nome_prov:
-                    contador += 1
-            if contador == len(nome_prod):
-                match = p[3]
-                break
+        best_match = process.extractOne(nome_prov, Produto.__tabela_geral)
+        if best_match[1] < 90:
+            return ""
+        return best_match[0]
+        
+        # match: str = ""
+        # contador: int
+        # for p in Produto.__tabela_geral:
+            # contador = 0
+            # nome_prod: list[str] = p[3].split(" ")
+            # for s in nome_prod:
+            #     if s in nome_prov:
+            #         contador += 1
+            # if contador == len(nome_prod):
+            #     match = p[3]
+            #     break
 
-        return match
+        # return match
 
     def to_dict(self) -> dict[str, Any]:
         return {

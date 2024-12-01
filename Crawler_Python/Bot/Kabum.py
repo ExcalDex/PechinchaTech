@@ -69,7 +69,7 @@ class Scraper:
         )  # Precisa fazer essa requisição de forma síncrona para retirar a quantidade de páginas
         primeira_pagina = BeautifulSoup(page.content, "html.parser")
         paginas = primeira_pagina.find_all("a", class_="page")
-        qtd_pages = int(paginas[-1].string)
+        qtd_pages = 2 #int(paginas[-1].string)
 
         async with aiohttp.ClientSession() as session:
             for i in range(1, qtd_pages + 1):

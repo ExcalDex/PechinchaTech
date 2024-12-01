@@ -33,9 +33,24 @@
 .produto-botao {
     margin-left: 20px;
     font-size: 20px;
-    color: #0000FF;
+}
+
+.benchmark-botao {
+    margin-left: 20px;
+    margin-top: 10px;
+    font-size: 15px;
 }
 
 .botao-text {
     margin-left: 5px;
+}
+
+.botoes-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.dados {
+    display: flex;
+    flex-direction: column;
 }

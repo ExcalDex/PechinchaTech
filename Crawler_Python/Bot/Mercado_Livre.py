@@ -1,4 +1,6 @@
 import asyncio
+import base64
+import json
 import requests
 import aiohttp
 from lxml import html
@@ -72,43 +74,55 @@ class Scraper:
             responses = await asyncio.gather(*tasks)
 
         for page in responses:
-            bs_page = BeautifulSoup(page, "html.parser")
-            products = bs_page.find_all('li', class_='ui-search-layout__item')
-            
             nomes: list = []
             valores: list = []
             links: list = []
             imagens: list = []
-
+            
+            bs_page = BeautifulSoup(page, "html.parser")
+            
+            scripts = bs_page.find_all('script')
+            script = bs_page.find_all('script')[-2].string
+            ml_json = json.loads(script)
+            products = ml_json["@graph"]
             for product in products:
-                h2 = product.find('h2', class_='poly-box poly-component__title')
-                a = h2.find('a')
-                div = product.find('div', class_='poly-price__current')
-                span = div.find('span', class_='andes-money-amount andes-money-amount--cents-superscript')
-                img = product.find('img', class_='poly-component__picture')
+                if(product["@type"] == "Product"):
+                    nomes.append(product["name"])
+                    valores.append(product["offers"]["price"])
+                    links.append(product["offers"]["url"])
+                    imagens.append(product["image"])
+            
+            # products = bs_page.find_all('li', class_='ui-search-layout__item')
+
+            # for product in products:
+            #     h2 = product.find('h2', class_='poly-box poly-component__title')
+            #     a = h2.find('a')
+            #     div = product.find('div', class_='poly-price__current')
+            #     span = div.find('span', class_='andes-money-amount andes-money-amount--cents-superscript')
+            #     img = product.find('img', class_='poly-component__picture')
                 
-                nomes.append(a.text)
-                valores.append(span.get('aria-label'))
-                links.append(a.get('href'))
-                imagens.append(img.get('src'))
+            #     nomes.append(a.text)
+            #     valores.append(span.get('aria-label'))
+            #     links.append(a.get('href'))
+            #     imagens.append(img.get('src'))
 
             
-            for j in range(len(valores)):
-                valores[j] = (
-                    valores[j]
-                    .replace(" ", "")
-                    .replace("reais", " ")
-                    .replace("com", "")
-                    .replace("centavos", "")
-                )
-                numeros = re.findall(r"\d+", valores[j])
-                if len(numeros) == 1:
-                    reais = int(numeros[0])
-                    centavos = 0
-                else:
-                    reais = int(numeros[0])
-                    centavos = int(numeros[1])
-                valores[j] = reais + (centavos / 100)
+            # for j in range(len(valores)):
+            #     valores[j] = (
+            #         valores[j]
+            #         .replace(" ", "")
+            #         .replace("reais", " ")
+            #         .replace("com", "")
+            #         .replace("centavos", "")
+            #     )
+            #     numeros = re.findall(r"\d+", valores[j])
+            #     if len(numeros) == 1:
+            #         reais = int(numeros[0])
+            #         centavos = 0
+            #     else:
+            #         reais = int(numeros[0])
+            #         centavos = int(numeros[1])
+            #     valores[j] = reais + (centavos / 100)
 
 
             self.__data["Nome"] += nomes

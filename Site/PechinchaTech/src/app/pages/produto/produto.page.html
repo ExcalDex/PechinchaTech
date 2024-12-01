@@ -1,14 +1,17 @@
 <ion-header>
   <ion-toolbar class="toolbar">
-    <img slot="start" style="margin-left:10px; width: 33px; height: 33px;" src="assets/icon/skibididup.png">
+    <img slot="start" style="margin-left:10px; width: 33px; height: 33px;"
+      src="assets/icon/skibididup.png">
     <ion-title>
       PechinchaTech
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="clear" color="dark" routerLink="/main" [disabled]="router.url === '/main'">
+      <ion-button fill="clear" color="dark" routerLink="/main"
+        [disabled]="router.url === '/main'">
         Pesquisar Produto
       </ion-button>
-      <ion-button fill="clear" color="dark" routerLink="/benchmark" [disabled]="router.url === '/benchmark'">
+      <ion-button fill="clear" color="dark" routerLink="/benchmark"
+        [disabled]="router.url === '/benchmark'">
         Benchmark
       </ion-button>
     </ion-buttons>
@@ -24,34 +27,42 @@
     </ion-buttons>
     <ion-buttons *ngIf="verificaUserAutenticado()" slot="end">
       <ion-button slot="end" size="large" fill="clear">
-        <ion-icon slot="icon-only" color="dark" name="notifications-outline"></ion-icon>
+        <ion-icon slot="icon-only" color="dark"
+          name="notifications-outline"></ion-icon>
       </ion-button>
 
       <ion-button slot="end" size="large" fill="clear">
-        <ion-icon slot="icon-only" color="dark" name="person-circle-outline"></ion-icon>
+        <ion-icon slot="icon-only" color="dark"
+          name="person-circle-outline"></ion-icon>
       </ion-button>
       <!-- Botão provisório para logoff -->
-      <ion-button slot="end" size="large" fill="clear" (click)="encerrarSessao()">
-        <ion-icon slot="icon-only" color="dark" name="log-out-outline"></ion-icon>
+      <ion-button slot="end" size="large" fill="clear"
+        (click)="encerrarSessao()">
+        <ion-icon slot="icon-only" color="dark"
+          name="log-out-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
   <div class="container produto-data">
     <img src="{{produto.link_imagem}}" class="produto-img">
-    <div>
+    <div class="dados">
       <h1 class="produto-nome">{{produto.nome}}</h1>
-      <h1 class="produto-preco">R${{produto.preco}}</h1>
-      <ion-button class="produto-botao" size="large" color="dark" href="{{produto.link}}" >
-        <img *ngIf="produto.loja == 'KABUM'" class="store-badge" style="width: 50px; height: 50px"
+      <h1 class="produto-preco">R${{formatarPreco(produto.preco)}}</h1>
+      <h1 class="produto-score">Score Benchmark: {{getScoreProdutoBase(produto.id_produto_base)}}</h1>
+      <ion-button class="produto-botao" size="large" color="dark"
+        href="{{produto.link}}">
+        <img *ngIf="produto.loja == 'KABUM'" class="store-badge"
+          style="width: 50px; height: 50px"
           src="assets/icon/kabum.png">
-        <img *ngIf="produto.loja == 'MERCADO_LIVRE'" class="store-badge" style="width: 24px; height: 24px"
+        <img *ngIf="produto.loja == 'MERCADO_LIVRE'" class="store-badge"
+          style="width: 24px; height: 24px"
           src="assets/icon/mercado_livre.png">
         <p class="botao-text">Acessar na loja</p>
       </ion-button>
+      <ion-checkbox class="benchmark-botao" (ionChange)="selecaoProduto()">Adicionar para benchmark</ion-checkbox>
     </div>
   </div>
 </ion-content>

@@ -50,4 +50,20 @@ export class ProdutoPage implements OnInit {
     this.produto = await this.produtoService.consultarProduto(id);
   }
 
+  formatarPreco(preco: number) {
+    return preco.toFixed(2).replace('.', ',');
+  }
+
+  async getScoreProdutoBase(idProdutoBase: number) {
+    // let auxProdutoBase = await this.produtoBaseService.consultarProdutoBase(idProdutoBase);
+    // return auxProdutoBase.score_userbenchmark
+  }
+
+  async produtoSelecionado() {
+    return true;
+  }
+
+  async selecaoProduto() {
+    
+  }
 }
