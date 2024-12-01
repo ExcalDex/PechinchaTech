@@ -51,7 +51,7 @@
     <div class="dados">
       <h1 class="produto-nome">{{produto.nome}}</h1>
       <h1 class="produto-preco">R${{formatarPreco(produto.preco)}}</h1>
-      <h1 class="produto-score">Score Benchmark: {{getScoreProdutoBase(produto.id_produto_base)}}</h1>
+      <h1 class="produto-score">Score Benchmark: {{scoreProdutoBase}}</h1>
       <ion-button class="produto-botao" size="large" color="dark"
         href="{{produto.link}}">
         <img *ngIf="produto.loja == 'KABUM'" class="store-badge"
@@ -62,7 +62,7 @@
           src="assets/icon/mercado_livre.png">
         <p class="botao-text">Acessar na loja</p>
       </ion-button>
-      <ion-checkbox class="benchmark-botao" (ionChange)="selecaoProduto()">Adicionar para benchmark</ion-checkbox>
+      <ion-checkbox class="benchmark-botao" (ionChange)="selecionarProduto()">Adicionar para benchmark</ion-checkbox>
     </div>
   </div>
 </ion-content>

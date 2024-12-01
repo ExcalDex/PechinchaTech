@@ -21,12 +21,12 @@ public class ProdutoBaseService {
     }
 
     public ProdutoBase inserir(ProdutoBase p) {
-        if (p.getIdProdutoBase() != null) {
+        if (p.getId() != null) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Não insira Id!");
         }
 
         Long id = produtoBaseDao.inserir(p);
-        p.setIdProdutoBase(id);
+        p.setId(id);
         return p;
     }
 

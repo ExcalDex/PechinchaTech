@@ -17,7 +17,7 @@ import br.cefet.pechinchatech.model.ProdutoBase;
 public interface ProdutoBaseDao {
 
     @SqlUpdate(" insert into produto_base (nome, csv_row, tipo, marca, rank_userbenchmark, score_userbenchmark) "
-            + " values (:nome_benchmark, :csvRow, :tipo, :marca, :rank, :score);")
+            + " values (:nome, :csv_row, :tipo, :marca, :rank_userbenchmark, :score_usuerbenchmark);")
     @GetGeneratedKeys
     public Long inserir(@BindBean ProdutoBase p);
 

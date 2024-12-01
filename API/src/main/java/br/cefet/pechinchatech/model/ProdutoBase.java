@@ -12,21 +12,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProdutoBase {
     @NotNull(message = "Insira um score!")
-    int score;
+    int score_userbenchmark;
 
     @NotNull(message = "Insira um rank!")
-    int rank;
+    int rank_userbenchmark;
 
-    Long idProdutoBase;
+    Long id;
 
     @NotBlank(message = "Insira um nome!")
-    String nome_benchmark;
+    String nome;
 
     @NotNull(message = "Insira um tipo!")
     TipoProduto tipo;
 
     @NotNull(message = "Insira um número da linha csv!")
-    int csvRow;
+    int csv_row;
 
     @NotBlank(message = "Insira uma marca!")
     @Size(max = 16)

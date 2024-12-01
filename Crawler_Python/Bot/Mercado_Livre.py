@@ -1,10 +1,6 @@
 import asyncio
-import base64
 import json
-import requests
 import aiohttp
-from lxml import html
-import re
 from typing import Any
 from Model.ManageProduto import Tipo_Produto
 from bs4 import BeautifulSoup
@@ -81,7 +77,6 @@ class Scraper:
             
             bs_page = BeautifulSoup(page, "html.parser")
             
-            scripts = bs_page.find_all('script')
             script = bs_page.find_all('script')[-2].string
             ml_json = json.loads(script)
             products = ml_json["@graph"]

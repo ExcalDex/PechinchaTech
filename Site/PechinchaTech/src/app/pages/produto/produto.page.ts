@@ -20,10 +20,12 @@ export class ProdutoPage implements OnInit {
 
   userAutenticado: User;
   produto: Produto;
+  scoreProdutoBase: number;
 
   constructor(public router: Router, private activatedRoute: ActivatedRoute, private toastController: ToastController, private navController: NavController, private userService: UserService, private produtoBaseService: ProdutoBaseService, private produtoService: ProdutoService, private notifService: NotifService) { 
     this.userAutenticado = new User();
     this.produto = new Produto();
+    this.scoreProdutoBase = 0;
   }
 
   ngOnInit() {
@@ -48,22 +50,20 @@ export class ProdutoPage implements OnInit {
 
   async consultaProduto(id: number) {
     this.produto = await this.produtoService.consultarProduto(id);
+    this.scoreProdutoBase = (await this.produtoBaseService.consultarProdutoBase(this.produto.id_produto_base)).score_userbenchmark;
   }
 
   formatarPreco(preco: number) {
     return preco.toFixed(2).replace('.', ',');
   }
 
-  async getScoreProdutoBase(idProdutoBase: number) {
-    // let auxProdutoBase = await this.produtoBaseService.consultarProdutoBase(idProdutoBase);
-    // return auxProdutoBase.score_userbenchmark
-  }
-
-  async produtoSelecionado() {
-    return true;
-  }
-
-  async selecaoProduto() {
+  produtoSelecionado() {
     
+  }
+
+  selecionarProduto() {
+    if (1 == 1) {
+      
+    }
   }
 }

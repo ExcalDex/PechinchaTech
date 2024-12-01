@@ -11,7 +11,7 @@ export class ProdutoBaseService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
 
-  url: string = "http://localhost:8087/api/produto-base"
+  url: string = "http://localhost:8087/api/produtobase"
   constructor(private httpClient: HttpClient) { }
 
   async consultarProdutoBase(idProdutoBase: number): Promise<ProdutoBase> {

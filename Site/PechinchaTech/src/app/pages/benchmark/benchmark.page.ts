@@ -19,12 +19,48 @@ import { Router } from '@angular/router';
 export class BenchmarkPage implements OnInit {
 
   userAutenticado: User;
+  items: Produto[];
+  scoreMedio: number;
+  classificacao: string;
+  resumo: string;
+
   constructor(public router: Router, private toastController: ToastController, private navController: NavController, private userService: UserService, private produtoBaseService: ProdutoBaseService, private produtoService: ProdutoService, private notifService: NotifService) { 
     this.userAutenticado = new User();
     this.userAutenticado = this.userService.getUserAutenticado();
+    this.items = [];
+    this.scoreMedio = 0;
+    this.classificacao = "N/A";
+    this.resumo = "Aguardando seleção de peças..."
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.items = JSON.parse(localStorage.getItem('items') || '[]');
+    if (this.items[0].id != null) {
+      let sum = 0;
+      for (let i = 0; i < this.items.length; i++) {
+        sum += await this.getScoreProdutoBase(this.items[i].id_produto_base);
+      }
+      this.scoreMedio = sum / this.items.length;
+      if (this.scoreMedio < 100) {
+        this.classificacao = "Ruim!";
+      }
+      if (this.scoreMedio >= 100 && this.scoreMedio < 150) {
+        this.classificacao = "Bom!";
+      }
+      if (this.scoreMedio >= 150) {
+        this.classificacao = "Muito bom!";
+      }
+
+      // let scoreResumo = 0;
+      // if (scoreResumo < x) {
+      //   this.resumo = "Texto de Resumo"
+      // }
+    }
+  }
+
+  async getScoreProdutoBase(idProdutoBase: number): Promise<number> {
+    let auxProdutoBase = await this.produtoBaseService.consultarProdutoBase(idProdutoBase);
+    return auxProdutoBase.score_userbenchmark
   }
 
   verificaUserAutenticado(): boolean {

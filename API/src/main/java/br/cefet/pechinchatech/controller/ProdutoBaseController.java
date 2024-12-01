@@ -3,6 +3,7 @@ package br.cefet.pechinchatech.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,7 @@ import br.cefet.pechinchatech.model.ProdutoBase;
 import br.cefet.pechinchatech.service.ProdutoBaseService;
 import jakarta.validation.Valid;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/api/produtobase")
 public class ProdutoBaseController {

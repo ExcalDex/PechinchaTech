@@ -1,0 +1,36 @@
+.header {
+    text-align: center;
+    margin: 20px 0;
+    color: white;
+}
+
+.items-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+.item-card {
+    background: white;
+    width: 150px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.item-card img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.summary {
+    color: black;
+    background-color: white;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

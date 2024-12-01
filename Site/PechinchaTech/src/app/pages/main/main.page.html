@@ -89,7 +89,7 @@
 
     <ion-list class="container-produtos">
         <ion-row class="row-produtos">
-            <ion-col size="3" *ngFor="let produto of produtosPaginados">
+            <ion-col size="2" *ngFor="let produto of produtosPaginados">
                 <div class="produto-card" routerLink="/produto/{{produto.id}}">
                     <img class="produto-img" src="{{produto.link_imagem}}" alt="{{produto.nome}}">
                     <ion-card-title class="produto-nome">{{produto.nome}}</ion-card-title>
