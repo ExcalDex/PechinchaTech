@@ -3,8 +3,8 @@
     color: black !important;
 }
 
-.searchbar-input {
-    border-radius: 2000px !important;
+ion-searchbar.custom {
+    --border-radius: 20px;
 }
 
 .searchbar-container {
@@ -21,7 +21,8 @@ ion-searchbar {
 
 .popover-content {
     --background: #ECE6F0;
-    padding: 0%;
+    margin-top: 0px;
+    margin-bottom: 0px;
     color: black;
 }
 

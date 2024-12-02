@@ -64,12 +64,17 @@ class Scraper:
             produto = "disco-rigido-hd"
         if self.__produto == Tipo_Produto.SSD:
             produto = "ssd-2-5"
+            
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+        }
         page = requests.get(
-            f"https://www.kabum.com.br/hardware/{produto}"
+            f"https://www.kabum.com.br/hardware/{produto}",
+            headers=headers
         )  # Precisa fazer essa requisição de forma síncrona para retirar a quantidade de páginas
         primeira_pagina = BeautifulSoup(page.content, "html.parser")
         paginas = primeira_pagina.find_all("a", class_="page")
-        qtd_pages = 2 #int(paginas[-1].string)
+        qtd_pages = int(paginas[-1].string)
 
         async with aiohttp.ClientSession() as session:
             for i in range(1, qtd_pages + 1):
@@ -79,6 +84,7 @@ class Scraper:
 
         for page in responses:
             bs_page = BeautifulSoup(page, "html.parser")
+            scripts = bs_page.find_all("script")
             links = bs_page.find_all("script")[-1].string
             kabum_json = json.loads(links)
             try:

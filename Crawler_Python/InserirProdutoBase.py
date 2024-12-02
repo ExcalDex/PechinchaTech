@@ -18,10 +18,10 @@ if __name__ == "__main__":
             data = {
                 "tipo": matriz[i][0],
                 "marca": matriz[i][2],
-                "nome_benchmark": matriz[i][3],
-                "rank": matriz[i][4],
-                "score": matriz[i][5],
-                "csvRow": matriz[i][4] - 1,
+                "nome": matriz[i][3],
+                "rank_userbenchmark": matriz[i][4],
+                "score_userbenchmark": matriz[i][5],
+                "csv_row": matriz[i][4] - 1,
             }
             requests.post(
                 "http://localhost:8087/api/produtobase/",
