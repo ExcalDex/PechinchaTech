@@ -3,7 +3,7 @@ from enum import Enum
 import numpy
 from typing import Any
 import requests
-from fuzzywuzzy import process
+from fuzzywuzzy import process, fuzz
 
 
 class Lojas(Enum):
@@ -84,8 +84,8 @@ class Produto:
 
         if self.__tipo == None:
             return ""
-
-        best_match = process.extractOne(nome_prov, Produto.__tabela_geral)
+        
+        best_match = process.extractOne(nome_prov, Produto.__tabela_geral, scorer=fuzz.token_set_ratio)
         if best_match[1] < 90:
             return ""
         return best_match[0]

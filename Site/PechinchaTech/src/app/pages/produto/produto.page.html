@@ -62,7 +62,8 @@
           src="assets/icon/mercado_livre.png">
         <p class="botao-text">Acessar na loja</p>
       </ion-button>
-      <ion-checkbox class="benchmark-botao" (ionChange)="selecionarProduto()">Adicionar para benchmark</ion-checkbox>
+      <ion-checkbox *ngIf="produto.tipo == 'CPU' || produto.tipo == 'GPU'" [(ngModel)]="selected" class="benchmark-botao" (ionChange)="selecionarProduto()">Adicionar para benchmark</ion-checkbox>
+      <ion-checkbox [(ngModel)]="iSelected" class="benchmark-botao" (ionChange)="selecionarProdutoInteresse()">Tenho interesse nesse produto</ion-checkbox>
     </div>
   </div>
 </ion-content>

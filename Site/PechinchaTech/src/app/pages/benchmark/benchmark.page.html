@@ -40,8 +40,8 @@
 
 <ion-content class="content">
     <div class="header">
-        <ion-title>Classificação: {{classificacao}}</ion-title>
-        <p>Score Médio: {{scoreMedio}}</p>
+        <!-- <ion-title>Classificação: {{classificacao}}</ion-title>
+        <p>Score Médio: {{scoreMedio}}</p> -->
     </div>
 
     <div class="items-container">
@@ -49,13 +49,12 @@
             <img [src]="item.link_imagem" />
             <h2>{{ item.tipo }}</h2>
             <p>{{ item.nome }}</p>
-            <span>{{ getScoreProdutoBase(item.id_produto_base) }}</span>
+
         </div>
     </div>
 
     <div class="summary">
         <h3>Resumo do Benchmark:</h3>
         <p>{{resumo}}</p>
-        <a href="" style="float: right;">Entenda mais sobre a análise e pontuação</a>
     </div>
 </ion-content>

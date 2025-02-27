@@ -34,15 +34,15 @@ public class ProdutoService {
 
     // Update completo usando o bot. Preciso testar depois, mas provavelmente funciona melhor do que ativar a notificação SSE pra cada vez que um objeto é adicionado ao banco
     public List<Produto> inserir(List<Produto> pl) {
+        produtoDao.excluirTodos();
         for (Produto p : pl) {
             if (p.getId() != null) {
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Não insira Id!");
             }
-    
             Long id = produtoDao.inserir(p);
             p.setId(id);
         }
-        this.sService.notificarClientes(pl);
+        this.sService.notificarClientes("Produtos atualizados! Recarregue a página de pesquisa para verificar as novas ofertas!");
         return pl;
     }
 
@@ -82,4 +82,5 @@ public class ProdutoService {
         }
         return pAux;
     }
+
 }

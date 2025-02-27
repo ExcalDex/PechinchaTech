@@ -32,4 +32,7 @@ public interface ProdutoDao {
 
     @SqlUpdate("DELETE FROM produto WHERE id = :id;")
     public int excluir(@Bind("id") Long id);
+
+    @SqlUpdate("TRUNCATE TABLE produto;")
+    public int excluirTodos();
 }

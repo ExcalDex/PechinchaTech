@@ -50,6 +50,8 @@ export class UserService {
   }*/
 
   registrarUserAutenticado(user: User) {
+    localStorage.removeItem('produtosSelecionados');
+    localStorage.removeItem('produtosInteresse');
     localStorage.setItem('userAutenticado', JSON.stringify(user));
   }
 

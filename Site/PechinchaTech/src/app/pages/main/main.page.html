@@ -1,17 +1,14 @@
 <ion-header>
     <ion-toolbar class="toolbar">
-        <img slot="start" style="margin-left:10px; width: 33px; height: 33px;"
-            src="assets/icon/skibididup.png">
+        <img slot="start" style="margin-left:10px; width: 33px; height: 33px;" src="assets/icon/skibididup.png">
         <ion-title>
             PechinchaTech
         </ion-title>
         <ion-buttons slot="end">
-            <ion-button fill="clear" color="dark" routerLink="/main"
-                [disabled]="router.url === '/main'">
+            <ion-button fill="clear" color="dark" routerLink="/main" [disabled]="router.url === '/main'">
                 Pesquisar Produto
             </ion-button>
-            <ion-button fill="clear" color="dark" routerLink="/benchmark"
-                [disabled]="router.url === '/benchmark'">
+            <ion-button fill="clear" color="dark" routerLink="/benchmark" [disabled]="router.url === '/benchmark'">
                 Benchmark
             </ion-button>
         </ion-buttons>
@@ -26,50 +23,62 @@
             </ion-button>
         </ion-buttons>
         <ion-buttons *ngIf="verificaUserAutenticado()" slot="end">
-            <ion-button slot="end" size="large" fill="clear">
-                <ion-icon slot="icon-only" color="dark"
-                    name="notifications-outline"></ion-icon>
+            <ion-button id="open-action-sheet" slot="end" size="large" fill="clear">
+
             </ion-button>
 
             <ion-button slot="end" size="large" fill="clear">
-                <ion-icon slot="icon-only" color="dark"
-                    name="person-circle-outline"></ion-icon>
+                <ion-icon slot="icon-only" color="dark" name="person-circle-outline"></ion-icon>
             </ion-button>
             <!-- Botão provisório para logoff -->
-            <ion-button slot="end" size="large" fill="clear"
-                (click)="encerrarSessao()">
-                <ion-icon slot="icon-only" color="dark"
-                    name="log-out-outline"></ion-icon>
+            <ion-button slot="end" size="large" fill="clear" (click)="encerrarSessao()">
+                <ion-icon slot="icon-only" color="dark" name="log-out-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-menu side="end" contentId="main-content">
+    <ion-header>
+        <ion-toolbar>
+            <ion-title>Notificações</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+        <ion-list>
+            <ion-item *ngFor="let notif of notifs">
+                <ion-label>
+                    <h2>{{notif.nome}}</h2>
+                    <p>{{notif.preco}}</p>
+                    <button class="linkP" (click)="limparNotif(notif)" routerLink="/produto/{{notif.id}}">Link para o produto!</button>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+        <ion-menu-toggle>
+            <ion-button>Clique para fechar as notificações!</ion-button>
+        </ion-menu-toggle>
+    </ion-content>
+</ion-menu>
+
+<ion-content id="main-content" fixed-slot-placement="before">
+
     <div class="searchbar-container">
-        <ion-searchbar (ionInput)="pesquisarProduto($event)" class="content custom"
-            show-clear-button="focus"
+        <ion-searchbar (ionInput)="pesquisarProduto($event)" class="content custom" show-clear-button="focus"
             placeholder="Pesquisar por produto...">
-            <ion-button id="click-trigger" shape="round" size="large" class="content"
-                size="medium" slot="start">
+            <ion-button id="click-trigger" shape="round" size="large" class="content" size="medium" slot="start">
                 <ion-icon slot="start" name="reorder-three-outline"></ion-icon>
                 {{tipoSimulado}}
             </ion-button>
             <ion-popover trigger="click-trigger" triggerAction="click">
                 <ng-template>
-                    <ion-button (click)="mudarListagem('TODOS')" expand="full"
-                        class="popover-content">Todos os
+                    <ion-button (click)="mudarListagem('TODOS')" expand="full" class="popover-content">Todos os
                         Tipos</ion-button>
-                    <ion-button (click)="mudarListagem('CPU')" expand="full"
-                        class="popover-content">CPU /
+                    <ion-button (click)="mudarListagem('CPU')" expand="full" class="popover-content">CPU /
                         Processador</ion-button>
-                    <ion-button (click)="mudarListagem('GPU')" expand="full"
-                        class="popover-content">GPU / Placa de
+                    <ion-button (click)="mudarListagem('GPU')" expand="full" class="popover-content">GPU / Placa de
                         Vídeo</ion-button>
-                    <ion-button (click)="mudarListagem('SSD')" expand="full"
-                        class="popover-content">SSD</ion-button>
-                    <ion-button (click)="mudarListagem('HDD')" expand="full"
-                        class="popover-content">HDD / Disco
+                    <ion-button (click)="mudarListagem('SSD')" expand="full" class="popover-content">SSD</ion-button>
+                    <ion-button (click)="mudarListagem('HDD')" expand="full" class="popover-content">HDD / Disco
                         Rígido</ion-button>
                 </ng-template>
             </ion-popover>
@@ -77,52 +86,52 @@
     </div>
 
     <div *ngIf="maxPage > 1" class="searchbar-container">
-        <ion-button class="toolbar" [disabled]="currentPage == 1"
-            (click)="mudarPagina(currentPage - 1)">
-            <ion-icon fill="icon-only" color="dark"
-                name="arrow-back-outline"></ion-icon>
+        <ion-button class="toolbar" [disabled]="currentPage == 1" (click)="mudarPagina(currentPage - 1)">
+            <ion-icon fill="icon-only" color="dark" name="arrow-back-outline"></ion-icon>
         </ion-button>
-        <ion-button *ngIf="currentPage > 2" class="toolbar"
-            (click)="mudarPagina(1)">1</ion-button>
+        <ion-button *ngIf="currentPage > 2" class="toolbar" (click)="mudarPagina(1)">1</ion-button>
         <ion-button *ngIf="currentPage > 3" class="reticencias" fill="clear">
-            <ion-icon fill="icon-only" color="dark"
-                name="ellipsis-horizontal"></ion-icon>
+            <ion-icon fill="icon-only" color="dark" name="ellipsis-horizontal"></ion-icon>
         </ion-button>
         <ion-button *ngIf="currentPage - 1 >= 1" class="toolbar"
             (click)="mudarPagina(currentPage-1)">{{currentPage-1}}</ion-button>
-        <ion-button class="toolbar"
-            [disabled]="true">{{currentPage}}</ion-button>
+        <ion-button class="toolbar" [disabled]="true">{{currentPage}}</ion-button>
         <ion-button *ngIf=" maxPage >= currentPage + 1" class="toolbar"
             (click)="mudarPagina(currentPage+1)">{{currentPage+1}}</ion-button>
-        <ion-button *ngIf="maxPage - 3 >= currentPage" class="reticencias"
-            fill="clear">
-            <ion-icon fill="icon-only" color="dark"
-                name="ellipsis-horizontal"></ion-icon>
+        <ion-button *ngIf="maxPage - 3 >= currentPage" class="reticencias" fill="clear">
+            <ion-icon fill="icon-only" color="dark" name="ellipsis-horizontal"></ion-icon>
         </ion-button>
         <ion-button *ngIf="maxPage - 2 >= currentPage" class="toolbar"
             (click)="mudarPagina(maxPage)">{{maxPage}}</ion-button>
-        <ion-button class="toolbar" (click)="mudarPagina(currentPage + 1)"
-            [disabled]="currentPage == maxPage">
-            <ion-icon fill="icon-only" color="dark"
-                name="arrow-forward-outline"></ion-icon>
+        <ion-button class="toolbar" (click)="mudarPagina(currentPage + 1)" [disabled]="currentPage == maxPage">
+            <ion-icon fill="icon-only" color="dark" name="arrow-forward-outline"></ion-icon>
         </ion-button>
     </div>
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+        <ion-menu-toggle>
+            <ion-fab-button (click)="openMenu()" id="open-action-sheet">
+                <h1 *ngIf="quantNotif > 0" color="dark">{{quantNotif}}</h1>
+                <ion-icon *ngIf="quantNotif == 0" color="dark" name="notifications-outline"></ion-icon>
+            </ion-fab-button>
+        </ion-menu-toggle>
+    </ion-fab>
+    <!-- <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+        <ion-fab-button (click)="openMenu()" id="open-action-sheet">
+            <h1 *ngIf="quantNotif > 0" color="dark">{{quantNotif}}</h1>
+            <ion-icon *ngIf="quantNotif == 0" color="dark" name="notifications-outline"></ion-icon>
+        </ion-fab-button>
+    </ion-fab> -->
 
     <ion-list class="container-produtos">
         <ion-row class="row-produtos">
             <ion-col size="2" *ngFor="let produto of produtosPaginados">
                 <div class="produto-card" routerLink="/produto/{{produto.id}}">
-                    <img class="produto-img" src="{{produto.link_imagem}}"
-                        alt="{{produto.nome}}">
-                    <ion-card-title
-                        class="produto-nome">{{produto.nome}}</ion-card-title>
-                    <ion-card-title
-                        class="produto-preco">R${{formatarPreco(produto.preco)}}</ion-card-title>
-                    <img *ngIf="produto.loja == 'KABUM'" class="store-badge"
-                        style="width: 24px; height: 24px"
+                    <img class="produto-img" src="{{produto.link_imagem}}" alt="{{produto.nome}}">
+                    <ion-card-title class="produto-nome">{{produto.nome}}</ion-card-title>
+                    <ion-card-title class="produto-preco">R${{formatarPreco(produto.preco)}}</ion-card-title>
+                    <img *ngIf="produto.loja == 'KABUM'" class="store-badge" style="width: 24px; height: 24px"
                         src="assets/icon/kabum.png">
-                    <img *ngIf="produto.loja == 'MERCADO_LIVRE'"
-                        class="store-badge" style="width: 24px; height: 24px"
+                    <img *ngIf="produto.loja == 'MERCADO_LIVRE'" class="store-badge" style="width: 24px; height: 24px"
                         src="assets/icon/mercado_livre.png">
                 </div>
                 <!-- <ion-card color="dark" class="content produto-card" routerLink="/produto/{{produto.id}}">
@@ -139,34 +148,25 @@
     </ion-list>
 
     <div *ngIf="maxPage > 1" class="searchbar-container">
-        <ion-button class="toolbar" [disabled]="currentPage == 1"
-            (click)="mudarPagina(currentPage - 1)">
-            <ion-icon fill="icon-only" color="dark"
-                name="arrow-back-outline"></ion-icon>
+        <ion-button class="toolbar" [disabled]="currentPage == 1" (click)="mudarPagina(currentPage - 1)">
+            <ion-icon fill="icon-only" color="dark" name="arrow-back-outline"></ion-icon>
         </ion-button>
-        <ion-button *ngIf="currentPage > 2" class="toolbar"
-            (click)="mudarPagina(1)">1</ion-button>
+        <ion-button *ngIf="currentPage > 2" class="toolbar" (click)="mudarPagina(1)">1</ion-button>
         <ion-button *ngIf="currentPage > 3" class="reticencias" fill="clear">
-            <ion-icon fill="icon-only" color="dark"
-                name="ellipsis-horizontal"></ion-icon>
+            <ion-icon fill="icon-only" color="dark" name="ellipsis-horizontal"></ion-icon>
         </ion-button>
         <ion-button *ngIf="currentPage - 1 >= 1" class="toolbar"
             (click)="mudarPagina(currentPage-1)">{{currentPage-1}}</ion-button>
-        <ion-button class="toolbar"
-            [disabled]="true">{{currentPage}}</ion-button>
+        <ion-button class="toolbar" [disabled]="true">{{currentPage}}</ion-button>
         <ion-button *ngIf=" maxPage >= currentPage + 1" class="toolbar"
             (click)="mudarPagina(currentPage+1)">{{currentPage+1}}</ion-button>
-        <ion-button *ngIf="maxPage - 3 >= currentPage" class="reticencias"
-            fill="clear">
-            <ion-icon fill="icon-only" color="dark"
-                name="ellipsis-horizontal"></ion-icon>
+        <ion-button *ngIf="maxPage - 3 >= currentPage" class="reticencias" fill="clear">
+            <ion-icon fill="icon-only" color="dark" name="ellipsis-horizontal"></ion-icon>
         </ion-button>
         <ion-button *ngIf="maxPage - 2 >= currentPage" class="toolbar"
             (click)="mudarPagina(maxPage)">{{maxPage}}</ion-button>
-        <ion-button class="toolbar" (click)="mudarPagina(currentPage + 1)"
-            [disabled]="currentPage == maxPage">
-            <ion-icon fill="icon-only" color="dark"
-                name="arrow-forward-outline"></ion-icon>
+        <ion-button class="toolbar" (click)="mudarPagina(currentPage + 1)" [disabled]="currentPage == maxPage">
+            <ion-icon fill="icon-only" color="dark" name="arrow-forward-outline"></ion-icon>
         </ion-button>
     </div>
 </ion-content>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from 'src/app/model/user';
 import { ProdutoBase } from 'src/app/model/produto-base';
 import { Produto } from 'src/app/model/produto';
@@ -7,9 +7,10 @@ import { ProdutoBaseService } from 'src/app/services/produto-base.service'
 import { ProdutoService } from 'src/app/services/produto.service';
 import { NotifService } from 'src/app/services/notif.service';
 import { UserService } from 'src/app/services/user.service';
-import { ToastController } from '@ionic/angular';
+import { MenuController, ToastController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SseService } from 'src/app/services/sse.service';
 
 @Component({
   selector: 'app-main',
@@ -25,8 +26,10 @@ export class MainPage implements OnInit {
   currentPage: number;
   maxPage: number;
   tipoSimulado: string;
+  quantNotif: number;
+  notifs: Produto[];
 
-  constructor(public router: Router, private activatedRoute: ActivatedRoute, private toastController: ToastController, private navController: NavController, private userService: UserService, private produtoBaseService: ProdutoBaseService, private produtoService: ProdutoService, private notifService: NotifService) {
+  constructor(private menu: MenuController, public router: Router, private activatedRoute: ActivatedRoute, private toastController: ToastController, private navController: NavController, private userService: UserService, private produtoBaseService: ProdutoBaseService, private produtoService: ProdutoService, public notifService: NotifService, private sseService: SseService) {
     this.userAutenticado = new User();
     this.produtos = [];
     this.copiaProdutos = [];
@@ -34,10 +37,17 @@ export class MainPage implements OnInit {
     this.currentPage = 1;
     this.maxPage = 1;
     this.tipoSimulado = 'TODOS';
+    this.quantNotif = 0;
+    this.notifs = [];
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.userAutenticado = this.userService.getUserAutenticado();
+    this.sseService.connect("http://localhost:8087/api/sse/subscribe");
+    this.notifs = await this.notifService.verificarPromocao()
+    if (this.notifs) {
+      this.quantNotif = this.notifs.length;
+    }
   }
 
   async ionViewWillEnter() {
@@ -106,5 +116,21 @@ export class MainPage implements OnInit {
   mudarPagina(num: number) {
     this.currentPage = num;
     this.carregarProdutosPaginados();
+  }
+
+  async exibirMensagem(texto: string) {
+    const toast = await this.toastController.create({
+      message: texto,
+      duration: 1500
+    });
+    toast.present();
+  }
+
+  openMenu() {
+    this.menu.open('fisrt');
+  }
+
+  limparNotif(notif: Produto) {
+    this.notifService.removerProdutoInteresse(notif)
   }
 }

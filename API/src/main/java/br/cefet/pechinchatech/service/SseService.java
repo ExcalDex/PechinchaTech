@@ -14,7 +14,7 @@ public class SseService {
     private final List<SseEmitter> emitters = new ArrayList<>();
 
     public SseEmitter inscrever() {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(0L);
         emitters.add(emitter);
         emitter.onCompletion(() -> emitters.remove(emitter));
         emitter.onTimeout(() -> emitters.remove(emitter));
@@ -26,6 +26,18 @@ public class SseService {
         emitters.forEach(emitter -> {
             try {
                 emitter.send(SseEmitter.event().data(data));
+            } catch (IOException e) {
+                emittersMortos.add(emitter);
+            }
+        });
+        emitters.removeAll(emittersMortos);
+    }
+
+    public void notificarClientes(String mensagem) {
+        List<SseEmitter> emittersMortos = new ArrayList<>();
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event().data(mensagem));
             } catch (IOException e) {
                 emittersMortos.add(emitter);
             }
